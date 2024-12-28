@@ -1,28 +1,25 @@
+// src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Header from './components/Header';
-import Home from './pages/Home';
-import Login from './components/Login';
-import Signup from './components/Signup';
-import Features from './pages/Features';
-import StepGuide from './pages/StepGuide';
-import Pricing from './pages/Pricing';
-
+import Login from './components/Login';  // Login component
+import Dashboard from './components/Dashboard';  // Dashboard after login
+import Home from './pages/Home';  // Correct path to the Home page component
 
 const App = () => {
- return (
-   <Router>
-     <Header />
-     <Routes>
-       <Route path="/" element={<Home />} />
-       <Route path="/login" element={<Login />} />
-       <Route path="/signup" element={<Signup />} />
-       <Route path="/features" element={<Features />} />
-       <Route path="/step-guide" element={<StepGuide />} />
-       <Route path="/pricing" element={<Pricing />} />
-     </Routes>
-   </Router>
- );
+  return (
+    <Router>
+      <Routes>
+        {/* Homepage will be at the root / */}
+        <Route path="/" element={<Home />} />
+        
+        {/* Login page at /login */}
+        <Route path="/login" element={<Login />} />
+        
+        {/* Dashboard page (only accessible after login) */}
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </Router>
+  );
 };
 
 export default App;

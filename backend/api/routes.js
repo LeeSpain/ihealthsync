@@ -1,7 +1,5 @@
-// backend/api/routes.js
-
 const express = require('express');
-const { loginUser } = require('../controller/userController'); // Corrected path
+const { loginUser } = require('../controllers/userController'); // Corrected path
 
 const router = express.Router();
 

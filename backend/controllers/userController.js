@@ -1,30 +1,33 @@
-// backend/controller/userController.js
-
+// controllers/userController.js
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User'); // Import User model
+const User = require('../models/User');  // Adjust the path if necessary
 
-// Login handler
+// Login controller function
 const loginUser = async (req, res) => {
-  try {
-    const { email, password } = req.body;
+  const { email, password } = req.body;
 
-    // Find user by email
+  try {
+    // Find the user in the database by email
     const user = await User.findOne({ email });
+
+    // If user is not found
     if (!user) {
       return res.status(400).json({ message: 'Invalid email or password' });
     }
 
-    // Compare the password
+    // Compare the hashed password
     const isMatch = await bcrypt.compare(password, user.password);
+    
+    // If passwords don't match
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid email or password' });
     }
 
-    // Generate JWT token
+    // Create JWT token
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    // Respond with the token
+    // Send token back to the frontend
     res.json({ token });
   } catch (err) {
     console.error(err);

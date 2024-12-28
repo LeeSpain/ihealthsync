@@ -1,292 +1,238 @@
-import React from 'react';
-import { ChevronRight, Download, Activity, Shield, Star, Heart, HeartPulse, Brain, 
-         Phone, Clock, ThermometerIcon, CheckCircle2, ArrowRight } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { 
+  Heart, Activity, Brain, Thermometer, Lock, ChevronRight, Bell, Shield, 
+  Plus, AlertCircle, Star 
+} from 'lucide-react';
 
+// Importing your existing Header component
+import Header from '../components/Header'; // Adjust the path as needed
+
+// LiveMetricCard Component with Animation
+const LiveMetricCard = ({ 
+  icon: Icon, 
+  title, 
+  value, 
+  unit, 
+  locked, 
+  trend,
+  minValue,
+  maxValue,
+  alertThreshold
+}) => {
+  const isAlert = value > alertThreshold?.max || value < alertThreshold?.min;
+
+  return (
+    <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 relative overflow-hidden group">
+      {locked ? (
+        <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="text-center">
+            <Lock className="w-6 h-6 text-white mb-2 mx-auto" />
+            <span className="text-white text-sm">Premium Feature</span>
+          </div>
+        </div>
+      ) : (
+        <div className="absolute top-2 right-2">
+          {isAlert && (
+            <div className="text-[#FF7F50] animate-pulse">
+              <AlertCircle className="w-5 h-5" />
+            </div>
+          )}
+        </div>
+      )}
+
+      <div className="flex items-center gap-3 mb-2">
+        <div className={`rounded-lg p-2 ${isAlert ? 'bg-[#FF7F50]/20' : 'bg-white/20'}`}>
+          <Icon className={`w-5 h-5 ${isAlert ? 'text-[#FF7F50]' : 'text-white'}`} />
+        </div>
+        <span className="text-white/90 text-sm">{title}</span>
+      </div>
+
+      <div className="flex items-end gap-2">
+        <div className="text-2xl font-bold text-white">
+          {value?.toFixed(1)}
+          <span className="text-sm ml-1 font-normal text-white/70">{unit}</span>
+        </div>
+        {trend && !locked && (
+          <div className={`text-sm ${trend > 0 ? 'text-green-400' : 'text-[#FF7F50]'}`}>
+            {trend > 0 ? '↑' : '↓'} {Math.abs(trend).toFixed(1)}%
+          </div>
+        )}
+      </div>
+
+      {!locked && (
+        <div className="mt-2 h-1 bg-white/20 rounded-full overflow-hidden">
+          <div 
+            className="h-full bg-white/40 rounded-full transition-all duration-500"
+            style={{ 
+              width: `${((value - minValue) / (maxValue - minValue)) * 100}%`,
+              backgroundColor: isAlert ? '#FF7F50' : undefined
+            }}
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Live Stats Provider Component
+const LiveStatsProvider = ({ children }) => {
+  const [metrics, setMetrics] = useState({
+    heartRate: { value: 72, trend: 0 },
+    bloodPressure: { value: 120, trend: 0 },
+    temperature: { value: 36.6, trend: 0 },
+    sleep: { value: 7.5, trend: 0 },
+    oxygen: { value: 98, trend: 0 },
+    stress: { value: 35, trend: 0 }
+  });
+
+  const updateMetrics = useCallback(() => {
+    setMetrics(prev => {
+      const newMetrics = { ...prev };
+      Object.keys(newMetrics).forEach(key => {
+        const currentValue = newMetrics[key].value;
+        const change = (Math.random() * 2 - 1); // Random range
+        const newValue = currentValue + change;
+        const trend = ((newValue - currentValue) / currentValue) * 100;
+        
+        newMetrics[key] = {
+          value: newValue,
+          trend: trend
+        };
+      });
+      return newMetrics;
+    });
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(updateMetrics, 2000);
+    return () => clearInterval(interval);
+  }, [updateMetrics]);
+
+  return children(metrics);
+};
+
+// Home Component with Header
 const Home = () => {
-  const steps = [
-    {
-      icon: Download,
-      title: 'Start with Free App',
-      description: 'Download and set up your account with basic health monitoring',
-      features: ['Basic health tracking', 'Single emergency contact', 'Standard SOS alerts']
-    },
-    {
-      icon: Star,
-      title: 'Upgrade to Premium',
-      description: 'Access AI-powered monitoring and advanced analytics',
-      features: ['AI health monitoring', 'Up to 5 emergency contacts', 'Advanced analytics']
-    },
-    {
-      icon: Shield,
-      title: 'Add Basic Monitoring',
-      description: 'Connect essential devices for safety and tracking',
-      features: ['Guardian Button', 'Heart Rate Monitor', 'Family Dashboard']
-    },
-    {
-      icon: Activity,
-      title: 'Track Progress',
-      description: 'Monitor health metrics and receive insights',
-      features: ['Smart Scales', 'Bed Sensor', 'Expert Analysis']
-    }
-  ];
-
-  const features = [
-    {
-      icon: HeartPulse,
-      title: 'Health Monitoring',
-      description: 'Real-time tracking of vital signs',
-      subFeatures: [
-        { icon: Heart, text: 'Heart Rate & ECG' },
-        { icon: Brain, text: 'Sleep Analysis' },
-        { icon: ThermometerIcon, text: 'Temperature' }
-      ]
-    },
-    {
-      icon: Shield,
-      title: 'Emergency Response',
-      description: '24/7 professional monitoring',
-      subFeatures: [
-        { icon: Phone, text: 'SOS Alerts' },
-        { icon: Activity, text: 'Fall Detection' },
-        { icon: Clock, text: 'Rapid Response' }
-      ]
-    },
-    {
-      icon: Brain,
-      title: 'AI Analytics',
-      description: 'Smart health predictions',
-      subFeatures: [
-        { icon: Activity, text: 'Trend Analysis' },
-        { icon: Heart, text: 'Risk Assessment' },
-        { icon: Clock, text: 'Early Warnings' }
-      ]
-    },
-    {
-      icon: Phone,
-      title: 'Care Connect',
-      description: 'Stay connected with care team',
-      subFeatures: [
-        { icon: Heart, text: 'Video Calls' },
-        { icon: Shield, text: 'Secure Chat' },
-        { icon: Clock, text: '24/7 Support' }
-      ]
-    }
-  ];
-
-  const testimonials = [
-    {
-      quote: "iHealth-Sync has revolutionized how I manage my mother's health. The peace of mind is invaluable.",
-      author: "Sarah M.",
-      role: "Family Caregiver"
-    },
-    {
-      quote: "The real-time monitoring and instant alerts have helped us provide better, more timely care.",
-      author: "Dr. James Wilson",
-      role: "Healthcare Provider"
-    },
-    {
-      quote: "As someone living alone, knowing I have 24/7 professional support gives me confidence and independence.",
-      author: "Robert Chen",
-      role: "Active Senior"
-    }
-  ];
+  const alertThresholds = {
+    heartRate: { min: 60, max: 100 },
+    bloodPressure: { min: 90, max: 140 },
+    temperature: { min: 36, max: 37.5 },
+    oxygen: { min: 95, max: 100 }
+  };
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="bg-[#008B8B] h-[560px] relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#008B8B]/20" />
-        <div className="container mx-auto max-w-5xl px-4 relative z-10 flex items-center h-full">
-          <div className="grid lg:grid-cols-2 gap-16 items-center w-full">
+      {/* Include the Header component */}
+      <Header />
+
+      {/* Hero Section with Live Dashboard */}
+      <section className="bg-gradient-to-br from-[#008B8B] via-[#009999] to-[#20B2AA] relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-transparent" />
+
+        <div className="max-w-7xl mx-auto px-6 py-20 relative z-10">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left Column - Content */}
             <div>
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-white/90 backdrop-blur-sm mb-8">
-                <span className="text-sm font-medium">Trusted by 50,000+ Users</span>
-              </div>
-              <h1 className="text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight">
-                Your Personal 
-                <span className="block mt-2 text-[#FF7F50]">Health Guardian</span>
+              <h1 className="text-5xl font-bold text-white mb-6">
+                Professional Health
+                <span className="block mt-2 text-[#FF7F50]">Monitoring</span>
               </h1>
-              <p className="text-xl text-white/90 max-w-xl mb-8 leading-relaxed">
-                Advanced health monitoring and emergency response system that keeps you and your loved ones safe, 24/7.
+
+              <p className="text-xl text-white/90 mb-8 leading-relaxed">
+                Advanced AI-powered health monitoring with real-time insights and professional analysis.
+                Get 24/7 emergency response and personalized care.
               </p>
-              <div className="flex gap-4">
-                <button className="bg-[#FF7F50] hover:bg-[#FF6347] text-white px-6 py-3 rounded-xl transition-all flex items-center gap-2">
-                  Get Started <ChevronRight className="w-5 h-5" />
+
+              <div className="flex gap-4 mb-8">
+                <button className="bg-[#FF7F50] hover:bg-[#FF6347] text-white px-6 py-3 rounded-xl flex items-center gap-2 transition-all">
+                  Start Free Trial <ChevronRight className="w-5 h-5" />
                 </button>
-                <button className="bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-xl transition-all flex items-center gap-2">
-                  Watch Demo <Download className="w-5 h-5" />
+                <button className="bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-xl flex items-center gap-2 transition-all">
+                  View Features <Plus className="w-5 h-5" />
                 </button>
               </div>
-            </div>
-            <div className="h-full flex items-center">
-              <div className="bg-white/10 p-8 rounded-2xl w-full h-80"></div>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* How It Works */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">How It Works</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Follow these steps to build your personalized health monitoring system
-            </p>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {steps.map((step, index) => (
-              <div key={index} 
-                   className="bg-white rounded-2xl p-8 border border-gray-200 relative hover:shadow-lg transition-all">
-                <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-[#008B8B]/10 flex items-center justify-center">
-                  <span className="text-[#008B8B] font-bold">0{index + 1}</span>
-                </div>
-                <div className="w-14 h-14 bg-[#008B8B]/10 rounded-2xl flex items-center justify-center mb-6">
-                  <step.icon className="w-7 h-7 text-[#008B8B]" />
-                </div>
-                <h3 className="text-xl font-bold mb-3">{step.title}</h3>
-                <p className="text-gray-600 mb-6">{step.description}</p>
-                <ul className="space-y-3">
-                  {step.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-center text-sm text-gray-600">
-                      <div className="w-1.5 h-1.5 rounded-full bg-[#FF7F50] mr-2" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
+              <div className="flex items-center gap-4 text-white/80">
+                <Bell className="w-5 h-5" />
+                <span className="text-sm">Premium includes 24/7 professional monitoring</span>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
+            </div>
 
-      {/* Features */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">Advanced Features</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Comprehensive health monitoring powered by advanced technology
-            </p>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, idx) => (
-              <div key={idx} 
-                   className="p-8 rounded-2xl hover:shadow-xl transition-all border border-gray-100
-                            bg-gradient-to-b from-white to-gray-50">
-                <div className="w-16 h-16 bg-[#008B8B]/10 rounded-2xl flex items-center justify-center mb-6">
-                  <feature.icon className="w-8 h-8 text-[#008B8B]" />
-                </div>
-                <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
-                <p className="text-gray-600 mb-6">{feature.description}</p>
-                <div className="space-y-4">
-                  {feature.subFeatures.map((subFeature, subIdx) => (
-                    <div key={subIdx} className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#008B8B]/5 flex items-center justify-center">
-                        <subFeature.icon className="w-4 h-4 text-[#008B8B]" />
-                      </div>
-                      <span className="text-gray-600">{subFeature.text}</span>
+            {/* Right Column - Live Dashboard */}
+            <LiveStatsProvider>
+              {(metrics) => (
+                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-xl font-semibold text-white">Live Health Metrics</h2>
+                    <div className="flex items-center gap-2 text-white/80">
+                      <div className="w-2 h-2 bg-[#FF7F50] rounded-full animate-pulse" />
+                      <span className="text-sm">Live Updates</span>
                     </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+                  </div>
 
-      {/* Testimonials */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">What Our Users Say</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Join thousands of satisfied users who trust iHealth-Sync
-            </p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, idx) => (
-              <div key={idx} className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all">
-                <div className="mb-6">
-                  <div className="flex items-center mb-2">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 text-[#FF7F50]" fill="#FF7F50" />
-                    ))}
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <LiveMetricCard
+                      icon={Heart}
+                      title="Heart Rate"
+                      value={metrics.heartRate.value}
+                      unit="bpm"
+                      trend={metrics.heartRate.trend}
+                      locked={false}
+                      minValue={40}
+                      maxValue={120}
+                      alertThreshold={alertThresholds.heartRate}
+                    />
+                    <LiveMetricCard
+                      icon={Activity}
+                      title="Blood Pressure"
+                      value={metrics.bloodPressure.value}
+                      unit="mmHg"
+                      trend={metrics.bloodPressure.trend}
+                      locked={true}
+                      minValue={80}
+                      maxValue={160}
+                      alertThreshold={alertThresholds.bloodPressure}
+                    />
+                    <LiveMetricCard
+                      icon={Thermometer}
+                      title="Temperature"
+                      value={metrics.temperature.value}
+                      unit="°C"
+                      trend={metrics.temperature.trend}
+                      locked={true}
+                      minValue={35}
+                      maxValue={38}
+                      alertThreshold={alertThresholds.temperature}
+                    />
+                    <LiveMetricCard
+                      icon={Brain}
+                      title="Sleep Score"
+                      value={metrics.sleep.value}
+                      unit="hrs"
+                      trend={metrics.sleep.trend}
+                      locked={true}
+                      minValue={0}
+                      maxValue={10}
+                    />
+                  </div>
+
+                  <div className="mt-6 p-4 bg-white/5 rounded-xl">
+                    <div className="flex items-center justify-between text-white/90">
+                      <div className="flex items-center gap-2">
+                        <Lock className="w-4 h-4" />
+                        <span className="text-sm">Unlock all metrics with Premium</span>
+                      </div>
+                      <button className="text-sm text-[#FF7F50] hover:text-[#FF6347] font-medium">
+                        Learn More
+                      </button>
+                    </div>
                   </div>
                 </div>
-                <p className="text-gray-600 mb-6 italic">"{testimonial.quote}"</p>
-                <div>
-                  <p className="font-bold text-gray-900">{testimonial.author}</p>
-                  <p className="text-gray-500 text-sm">{testimonial.role}</p>
-                </div>
-              </div>
-            ))}
+              )}
+            </LiveStatsProvider>
           </div>
         </div>
       </section>
-
-      {/* CTA Section */}
-      <section className="bg-[#008B8B] py-20">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold text-white mb-6">
-            Ready to Take Control of Your Health?
-          </h2>
-          <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-            Join iHealth-Sync today and experience the future of personal health monitoring
-          </p>
-          <div className="flex justify-center gap-6">
-            <button className="bg-[#FF7F50] hover:bg-[#FF6347] text-white px-8 py-4 rounded-xl flex items-center gap-2 transition-all">
-              Get Started Now
-              <ArrowRight className="w-5 h-5" />
-            </button>
-            <button className="bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-xl flex items-center gap-2 transition-all">
-              Schedule Demo
-              <Download className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="font-bold text-lg mb-4">iHealth-Sync</h3>
-              <p className="text-gray-400">
-                Advanced health monitoring for peace of mind.
-              </p>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">Product</h4>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Features</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Pricing</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Support</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">Company</h4>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">About Us</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Contact</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Privacy</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">Connect</h4>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Twitter</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">LinkedIn</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Facebook</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-            <p>&copy; {new Date().getFullYear()} iHealth-Sync. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };
