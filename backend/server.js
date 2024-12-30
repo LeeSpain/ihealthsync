@@ -1,35 +1,29 @@
 const express = require('express');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const User = require('./models/User');  // Ensure this path is correct
-const router = express.Router();
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const cors = require('cors');
+const bodyParser = require('body-parser');
 
-// POST route for login
-router.post('/login', async (req, res) => {
-  try {
-    const { email, password } = req.body;
+dotenv.config();
 
-    // Check if the user exists
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ message: 'Invalid email or password' });
-    }
+const authRoutes = require('./api/routes');
 
-    // Compare entered password with stored hashed password
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid email or password' });
-    }
+const app = express();
 
-    // Generate JWT token
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+// Middleware
+app.use(cors());
+app.use(bodyParser.json());
+app.use(express.json());
 
-    // Return the token
-    res.json({ token });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server error' });
-  }
-});
+// Database Connection
+mongoose
+  .connect(process.env.MONGODB_URI)
+  .then(() => console.log('Connected to MongoDB'))
+  .catch((err) => console.error('Database connection error:', err));
 
-module.exports = router;
+// Routes
+app.use('/api', authRoutes);
+
+// Start the server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server is running on http://localhost:${PORT}`));
