@@ -1,58 +1,74 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import Login from './components/Login'; // Login page
-import Home from './pages/Home'; // Home page
-import FeaturesPage from './pages/Features'; // Features page
-import Header from './components/Header'; // Default header
-import DashboardHeader from './components/DashboardHeader'; // Dashboard-specific header
-import FreeDashboard from './components/FreeDashboard'; // Free Dashboard page
-import SubscribedDashboard from './components/SubscribedDashboard'; // Subscribed Dashboard page
-import StepGuide from './pages/StepGuide'; // Step Guide page
-import Pricing from './pages/Pricing'; // Pricing page
+import { CartProvider } from './context/CartContext'; // Import CartProvider
+import Login from './components/Login';
+import Home from './pages/Home';
+import FeaturesPage from './pages/Features';
+import Header from './components/Header';
+import DashboardHeader from './components/DashboardHeader';
+import FreeDashboard from './components/FreeDashboard';
+import SubscribedDashboard from './components/SubscribedDashboard';
+import StepGuide from './pages/StepGuide';
+import Pricing from './pages/Pricing';
+import Products from './pages/dashboard/Products';
+import SettingsPage from './pages/dashboard/Settings';
+import ProfilePage from './pages/dashboard/Profile';
+import MessagesPage from './pages/dashboard/Messages'; // Added Messages Page
+import MedicationDispenserPage from './pages/dashboard/products/MedicationDispenserPage'; // Medication Dispenser page
+import HeartRateMonitorPage from './pages/dashboard/products/HeartRateMonitorPage'; // Heart Rate Monitor page
+import GuardianButtonPage from './pages/dashboard/products/GuardianButtonPage'; // Guardian Button page
+import ProductsPage from './pages/shop/Products.js';
+import YourNurse from './pages/dashboard/YourNurse'; // Import Your Nurse page
 
 const App = () => {
-  // State for toggling subscription status
-  const [userSubscribed, setUserSubscribed] = useState(false); // Default to Free Dashboard
+  const [userSubscribed, setUserSubscribed] = useState(false); // Manage user subscription status
 
   return (
     <Router>
-      <AppContent userSubscribed={userSubscribed} setUserSubscribed={setUserSubscribed} />
+      {/* Wrap the entire application with the CartProvider */}
+      <CartProvider>
+        <AppContent userSubscribed={userSubscribed} setUserSubscribed={setUserSubscribed} />
+      </CartProvider>
     </Router>
   );
 };
 
 const AppContent = ({ userSubscribed, setUserSubscribed }) => {
-  const location = useLocation();
-
-  // Check if the current path is a dashboard route
-  const isDashboard = location.pathname.startsWith('/dashboard');
+  const location = useLocation(); // Get the current path
+  const isDashboard = location.pathname.startsWith('/dashboard'); // Check if user is in dashboard
 
   return (
     <div className="min-h-screen">
-      {/* Render the appropriate header */}
+      {/* Conditionally render the correct header */}
       {isDashboard ? <DashboardHeader /> : <Header />}
 
       <main className="pt-16 relative">
         <Routes>
-          {/* Routes for different pages */}
-          <Route path="/" element={<Home />} /> {/* Home page */}
-          <Route path="/login" element={<Login />} /> {/* Login page */}
+          {/* Public Routes */}
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/features" element={<FeaturesPage />} />
+          <Route path="/step-guide" element={<StepGuide />} />
+          <Route path="/pricing" element={<Pricing />} />
           
-          {/* Conditional routing for the dashboard */}
-          <Route 
-            path="/dashboard" 
-            element={userSubscribed ? <SubscribedDashboard /> : <FreeDashboard />} 
-          />
+          {/* Protected Routes (Dashboard) */}
+          <Route path="/dashboard" element={userSubscribed ? <SubscribedDashboard /> : <FreeDashboard />} />
+          <Route path="/dashboard/products" element={<Products />} />
+          <Route path="/dashboard/settings" element={<SettingsPage />} />
+          <Route path="/dashboard/profile" element={<ProfilePage />} />
+          <Route path="/dashboard/messages" element={<MessagesPage />} /> {/* Added Messages Route */}
+          <Route path="/dashboard/nurse" element={<YourNurse />} /> {/* Added Your Nurse Route */}
 
-          <Route path="/features" element={<FeaturesPage />} /> {/* Features page */}
-          <Route path="/step-guide" element={<StepGuide />} /> {/* Step Guide page */}
-          <Route path="/pricing" element={<Pricing />} /> {/* Pricing page */}
+          {/* Product Management Pages */}
+          <Route path="/dashboard/products/medDispenser" element={<MedicationDispenserPage />} />
+          <Route path="/dashboard/products/heartMonitor" element={<HeartRateMonitorPage />} />
+          <Route path="/dashboard/products/guardianButton" element={<GuardianButtonPage />} />
         </Routes>
 
-        {/* Toggle button for testing subscription */}
+        {/* Subscription Toggle for Dashboard */}
         {isDashboard && (
           <button 
-            onClick={() => setUserSubscribed(!userSubscribed)} // Toggle subscription status
+            onClick={() => setUserSubscribed(!userSubscribed)} 
             style={{
               position: 'absolute',
               top: '20px',

@@ -1,21 +1,26 @@
 import React from 'react';
-import Logo from './Logo'; // Import the Logo component from src/components/logo.js
+import Logo from './Logo';
+import { Link } from 'react-router-dom';
 
 const DashboardHeader = () => {
   return (
-    <header style={{ backgroundColor: '#008B8B' }} className="py-4">
-      <div className="max-w-screen-xl mx-auto px-6 flex items-center justify-between">
-        {/* Use Logo Component */}
-        <div>
+    <header className="bg-[#008B8B] py-4">
+      <div className="max-w-screen-xl mx-auto px-6 flex items-center">
+        <Link to="/dashboard">
+          <Logo />
+        </Link>
+
+        <nav className="flex-1 flex justify-center space-x-6">
+          <Link to="/dashboard/products" className="text-[#FF7F50] hover:text-white">Products</Link>
+          <Link to="/dashboard/messages" className="text-[#FF7F50] hover:text-white">Messages</Link>
+          <Link to="/dashboard/nurse" className="text-[#FF7F50] hover:text-white">Your Nurse</Link>
+          <Link to="/dashboard/profile" className="text-[#FF7F50] hover:text-white">Profile</Link>
+          <Link to="/dashboard/settings" className="text-[#FF7F50] hover:text-white">Settings</Link> {/* Added Settings Link */}
+        </nav>
+
+        <div className="invisible">
           <Logo />
         </div>
-
-        {/* Dashboard Links */}
-        <nav className="flex space-x-6">
-          <a href="/dashboard/profile" style={{ color: '#FF7F50' }} className="hover:text-white">Profile</a>
-          <a href="/dashboard/settings" style={{ color: '#FF7F50' }} className="hover:text-white">Settings</a>
-          <a href="/dashboard/logout" style={{ color: '#FF7F50' }} className="hover:text-white">Logout</a>
-        </nav>
       </div>
     </header>
   );

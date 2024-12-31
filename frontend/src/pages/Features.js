@@ -1,6 +1,6 @@
 import React from 'react';
 import { HeartPulse, Brain, Shield, Activity, Phone, Star, Bot, 
-         Heart, Check, Stethoscope, ChevronRight, ArrowRight } from 'lucide-react';
+         Heart, Check, Stethoscope, ChevronRight, ArrowRight, Thermometer, Users, Scale } from 'lucide-react';
 
 const FeatureCard = ({ icon: Icon, title, description }) => (
   <div className="flex items-start gap-4 group p-4 rounded-lg hover:bg-gradient-to-r hover:from-[#008B8B]/5 hover:to-transparent transition-all duration-300">
@@ -15,49 +15,6 @@ const FeatureCard = ({ icon: Icon, title, description }) => (
 );
 
 const FeaturesPage = () => {
-  const features = [
-    {
-      title: 'Health Monitoring',
-      description: 'Real-time tracking of vital signs with AI-powered insights',
-      icon: HeartPulse,
-      details: [
-        'Continuous vital sign monitoring',
-        'Early warning system',
-        'Personalized health insights'
-      ]
-    },
-    {
-      title: 'Emergency Response',
-      description: '24/7 professional monitoring and rapid response',
-      icon: Shield,
-      details: [
-        'Immediate emergency alerts',
-        'Professional monitoring team',
-        'Quick emergency response'
-      ]
-    },
-    {
-      title: 'Smart Analytics',
-      description: 'Advanced health data analysis and predictions',
-      icon: Brain,
-      details: [
-        'Trend analysis',
-        'Health predictions',
-        'Personalized reports'
-      ]
-    },
-    {
-      title: 'Care Network',
-      description: 'Connect with healthcare providers and family',
-      icon: Activity,
-      details: [
-        'Family dashboard',
-        'Healthcare provider access',
-        'Secure communication'
-      ]
-    }
-  ];
-
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -110,23 +67,125 @@ const FeaturesPage = () => {
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
-            {features.map((feature, idx) => (
-              <div key={idx} className="bg-white rounded-xl p-8 shadow-sm hover:shadow-lg transition-all">
-                <div className="mb-6">
-                  <feature.icon className="w-12 h-12 text-[#008B8B]" />
+            <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-lg transition-all">
+              <HeartPulse className="w-12 h-12 text-[#008B8B]" />
+              <h3 className="text-xl font-bold mb-4">Members Dashboard</h3>
+              <p className="text-gray-600 mb-6">The heart of our service, centralizing all metrics related to your health and real-time updates.</p>
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-[#008B8B]" />
+                  <span className="text-gray-600">Real-time health metrics</span>
                 </div>
-                <h3 className="text-xl font-bold mb-4">{feature.title}</h3>
-                <p className="text-gray-600 mb-6">{feature.description}</p>
-                <div className="space-y-3">
-                  {feature.details.map((detail, index) => (
-                    <div key={index} className="flex items-center gap-2">
-                      <Check className="w-5 h-5 text-[#008B8B]" />
-                      <span className="text-gray-600">{detail}</span>
-                    </div>
-                  ))}
+                <div className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-[#008B8B]" />
+                  <span className="text-gray-600">Instant access to alerts</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-[#008B8B]" />
+                  <span className="text-gray-600">Comprehensive health tracking</span>
                 </div>
               </div>
-            ))}
+            </div>
+
+            <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-lg transition-all">
+              <Bot className="w-12 h-12 text-[#008B8B]" />
+              <h3 className="text-xl font-bold mb-4">Add-on AI Assisted Products</h3>
+              <p className="text-gray-600 mb-6">Enhance your experience with AI-powered products that provide personalized insights and support.</p>
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-[#008B8B]" />
+                  <span className="text-gray-600">AI health tips and predictions</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-[#008B8B]" />
+                  <span className="text-gray-600">Smart recommendations based on data</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-[#008B8B]" />
+                  <span className="text-gray-600">Continuous AI learning for improved support</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-lg transition-all">
+              <Shield className="w-12 h-12 text-[#008B8B]" />
+              <h3 className="text-xl font-bold mb-4">Emergency SOS</h3>
+              <p className="text-gray-600 mb-6">Immediate emergency response with professional monitoring, 24/7 support, and real-time alerts.</p>
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-[#008B8B]" />
+                  <span className="text-gray-600">Real-time emergency alerts</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-[#008B8B]" />
+                  <span className="text-gray-600">24/7 professional monitoring</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-[#008B8B]" />
+                  <span className="text-gray-600">Immediate call center support</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-lg transition-all">
+              <Heart className="w-12 h-12 text-[#008B8B]" />
+              <h3 className="text-xl font-bold mb-4">Glucose Monitoring</h3>
+              <p className="text-gray-600 mb-6">Track your glucose levels in real-time with automated alerts for better health management.</p>
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-[#008B8B]" />
+                  <span className="text-gray-600">Real-time glucose tracking</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-[#008B8B]" />
+                  <span className="text-gray-600">Automated alerts for abnormal levels</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-[#008B8B]" />
+                  <span className="text-gray-600">Integrated with your dashboard</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-lg transition-all">
+              <Scale className="w-12 h-12 text-[#008B8B]" />
+              <h3 className="text-xl font-bold mb-4">Medication Dispensers</h3>
+              <p className="text-gray-600 mb-6">Automated medication dispensing for precise, on-time doses, with easy remote monitoring.</p>
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-[#008B8B]" />
+                  <span className="text-gray-600">Automated medication reminders</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-[#008B8B]" />
+                  <span className="text-gray-600">Remote monitoring for caregivers</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-[#008B8B]" />
+                  <span className="text-gray-600">Customizable medication schedules</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-lg transition-all">
+              <Stethoscope className="w-12 h-12 text-[#008B8B]" />
+              <h3 className="text-xl font-bold mb-4">AI-Powered Assistance</h3>
+              <p className="text-gray-600 mb-6">Use AI-powered tools to gain insights, assistance, and improve your health monitoring.</p>
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-[#008B8B]" />
+                  <span className="text-gray-600">Real-time health insights</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-[#008B8B]" />
+                  <span className="text-gray-600">Smart health recommendations</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-5 h-5 text-[#008B8B]" />
+                  <span className="text-gray-600">Automated transcription of calls</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
