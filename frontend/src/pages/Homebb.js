@@ -1,111 +1,114 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Bell, ChevronRight, Plus, ArrowRight, Circle, UserPlus, Settings, Heart, Shield, Clock, CheckCircle, PhoneCall, Globe, Smartphone } from 'lucide-react';
+import {
+  Bell,
+  ChevronRight,
+  Plus,
+  ArrowRight,
+  Circle,
+  UserPlus,
+  Settings,
+  Heart,
+  Shield,
+  Clock,
+  CheckCircle,
+  PhoneCall,
+  Globe,
+  Smartphone,
+  Droplet,
+  Thermometer,
+  Moon,
+  Timer,
+  Zap,
+  AlertCircle,
+  Activity, // Added Activity icon
+} from 'lucide-react';
 
 const HomePage = () => {
+  // State Management
   const [activeStep, setActiveStep] = useState(null);
   const [hoveredStep, setHoveredStep] = useState(null);
+  const [stats, setStats] = useState({
+    heartRate: { value: 72, trend: '+1', status: 'normal' },
+    bloodPressure: { value: 120, status: 'normal' },
+    steps: { value: 8540, trend: '+258', status: 'above' },
+    oxygen: { value: 98, status: 'normal' },
+    sleep: { value: 7.5, status: 'normal' },
+    temp: { value: 98.6, status: 'normal' },
+    calories: { value: 1850, status: 'normal' },
+    stress: { value: 42, status: 'normal' },
+  });
 
+  // Steps Configuration
   const steps = [
     {
       id: 1,
-      title: "Create Your Profile",
+      title: 'Create Your Profile',
       icon: UserPlus,
-      description: "Start your health journey with a personalized profile",
+      description: 'Start your health journey with a personalized profile',
       substeps: [
-        "Complete health assessment",
-        "Set personal health goals",
-        "Connect your devices"
+        'Complete health assessment',
+        'Set personal health goals',
+        'Connect your devices',
       ],
-      stats: "2 min setup",
-      color: "bg-gradient-to-r from-[#008B8B] to-[#20B2AA]"
+      stats: '2 min setup',
+      color: 'bg-gradient-to-r from-[#008B8B] to-[#20B2AA]',
     },
     {
       id: 2,
-      title: "Personalize Your Experience",
+      title: 'Personalize Your Experience',
       icon: Settings,
-      description: "Customize your monitoring dashboard",
+      description: 'Customize your monitoring dashboard',
       substeps: [
-        "Choose vital signs to track",
-        "Set alert preferences",
-        "Add emergency contacts"
+        'Choose vital signs to track',
+        'Set alert preferences',
+        'Add emergency contacts',
       ],
-      stats: "5 min setup",
-      color: "bg-gradient-to-r from-violet-500 to-purple-500"
+      stats: '5 min setup',
+      color: 'bg-gradient-to-r from-[#008B8B] to-[#20B2AA]',
     },
     {
       id: 3,
-      title: "Start Monitoring",
+      title: 'Start Monitoring',
       icon: Heart,
-      description: "Begin your 24/7 health monitoring journey",
+      description: 'Begin your 24/7 health monitoring journey',
       substeps: [
-        "View real-time health data",
-        "Receive AI-powered insights",
-        "Share with healthcare providers"
+        'View real-time health data',
+        'Receive AI-powered insights',
+        'Share with healthcare providers',
       ],
-      stats: "Instant activation",
-      color: "bg-gradient-to-r from-orange-500 to-red-500"
-    }
+      stats: 'Instant activation',
+      color: 'bg-gradient-to-r from-[#008B8B] to-[#20B2AA]',
+    },
   ];
 
-  const StepCard = ({ step, index }) => {
-    const isActive = activeStep === step.id;
-    const isHovered = hoveredStep === step.id;
-    const Icon = step.icon;
+  // Status Indicator Component
+  const StatusIndicator = ({ status, value }) => {
+    const getStatusStyles = (status) => {
+      const styles = {
+        normal: 'bg-green-100 border-green-200 text-green-700',
+        above: 'bg-blue-100 border-blue-200 text-blue-700',
+        below: 'bg-amber-100 border-amber-200 text-amber-700',
+        alert: 'bg-red-100 border-red-200 text-red-700',
+      };
+      return styles[status] || styles.normal;
+    };
 
     return (
-      <div
-        className={`relative p-6 rounded-2xl transition-all duration-300 cursor-pointer
-          ${isActive ? 'bg-gradient-to-br from-[#20B2AA]/20 to-[#008B8B]/30 shadow-2xl scale-105 border border-[#20B2AA]/20' : 
-          'bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 hover:from-[#20B2AA]/20 hover:to-[#008B8B]/30 hover:shadow-xl border border-[#20B2AA]/10'}
-          ${index !== steps.length - 1 ? 'mb-8 md:mb-0' : ''}`}
-        onClick={() => setActiveStep(isActive ? null : step.id)}
-        onMouseEnter={() => setHoveredStep(step.id)}
-        onMouseLeave={() => setHoveredStep(null)}
-      >
-        <div className="flex items-start space-x-4">
-          <div className={`${step.color} p-4 rounded-xl text-white`}>
-            <Icon size={24} />
-          </div>
-          <div className="flex-1">
-            <div className="flex items-center justify-between">
-              <h3 className="text-xl font-semibold">{step.title}</h3>
-              <span className="text-gray-400">
-                <Clock size={16} className="inline mr-1" />
-                {step.stats}
-              </span>
-            </div>
-            <p className="mt-2 text-gray-600">{step.description}</p>
-            
-            {(isActive || isHovered) && (
-              <div className="mt-4 space-y-3">
-                {step.substeps.map((substep, idx) => (
-                  <div key={idx} className="flex items-center space-x-2 text-gray-700">
-                    <CheckCircle size={16} className="text-green-500" />
-                    <span>{substep}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {index !== steps.length - 1 && (
-          <div className="hidden md:block absolute -right-12 top-1/2 transform -translate-y-1/2">
-            <ChevronRight size={24} className="text-gray-400" />
-          </div>
-        )}
+      <div className={`px-2 py-1 rounded-full border ${getStatusStyles(status)}`}>
+        <span className="text-xs font-medium">{value}</span>
       </div>
     );
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#008B8B] via-[#20B2AA] to-[#E0FFFF]">
+    <div className="min-h-screen">
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-[#008B8B] via-[#009999] to-[#20B2AA] relative">
         <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-transparent" />
         <div className="max-w-7xl mx-auto px-6 py-20 relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left Column - Content */}
             <div>
               <h1 className="text-5xl font-bold text-white mb-6">
                 Professional Health
@@ -128,41 +131,171 @@ const HomePage = () => {
                 <span className="text-sm">Premium includes 24/7 professional monitoring</span>
               </div>
             </div>
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-              <h2 className="text-xl font-semibold text-white mb-4">Live Health Metrics</h2>
+
+            {/* Right Column - Clinical Dashboard */}
+            <div className="bg-white/95 backdrop-blur-md rounded-2xl p-6 border border-blue-100 shadow-lg">
+              {/* Dashboard Header */}
               <div className="flex items-center justify-between mb-4">
-                <div className="text-sm text-white/80">Stay updated in real-time</div>
+                <div className="flex items-center gap-3">
+                  <h2 className="text-xl font-semibold text-gray-800">Patient Vitals</h2>
+                  <div className="flex items-center gap-2 bg-red-50 border border-red-200 px-3 py-1 rounded-full">
+                    <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                    <span className="text-red-600 font-medium text-sm">Monitoring</span>
+                  </div>
+                </div>
               </div>
-              <div className="bg-white/10 h-64 flex items-center justify-center rounded-lg">
-                <span className="text-white text-lg">Metrics Dashboard Placeholder</span>
+
+              {/* Dashboard Grid */}
+              <div className="grid grid-cols-4 gap-3">
+                {/* Heart Rate - Primary Metric */}
+                <div className="col-span-2 bg-blue-50 rounded-xl p-4 hover:bg-blue-100/50 transition-all border border-blue-100">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <Heart className="w-4 h-4 text-red-500" />
+                        <span className="text-gray-700 text-sm font-medium">Heart Rate</span>
+                      </div>
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-3xl font-bold text-gray-900">{stats.heartRate.value}</span>
+                        <span className="text-gray-600 text-sm">bpm</span>
+                      </div>
+                    </div>
+                    <div className="bg-green-100 px-2 py-1 rounded-full border border-green-200">
+                      <span className="text-green-700 text-xs font-medium">+{stats.heartRate.trend}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Blood Pressure - Primary Metric */}
+                <div className="col-span-2 bg-blue-50 rounded-xl p-4 hover:bg-blue-100/50 transition-all border border-blue-100">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <Activity className="w-4 h-4 text-blue-600" />
+                        <span className="text-gray-700 text-sm font-medium">Blood Pressure</span>
+                      </div>
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-3xl font-bold text-gray-900">{stats.bloodPressure.value}/80</span>
+                        <span className="text-gray-600 text-sm">mmHg</span>
+                      </div>
+                    </div>
+                    <div className="bg-green-100 px-2 py-1 rounded-full border border-green-200">
+                      <span className="text-green-700 text-xs font-medium">Normal</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Secondary Metrics */}
+                <div className="bg-gray-50 rounded-xl p-3 hover:bg-gray-100/50 transition-all border border-gray-200">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Droplet className="w-4 h-4 text-cyan-600" />
+                    <span className="text-gray-700 text-xs font-medium">Oxygen</span>
+                  </div>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-2xl font-bold text-gray-900">{stats.oxygen.value}</span>
+                    <span className="text-gray-600 text-xs">%</span>
+                  </div>
+                </div>
+
+                <div className="bg-gray-50 rounded-xl p-3 hover:bg-gray-100/50 transition-all border border-gray-200">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Moon className="w-4 h-4 text-indigo-600" />
+                    <span className="text-gray-700 text-xs font-medium">Sleep</span>
+                  </div>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-2xl font-bold text-gray-900">{stats.sleep.value}</span>
+                    <span className="text-gray-600 text-xs">hrs</span>
+                  </div>
+                </div>
+
+                <div className="bg-gray-50 rounded-xl p-3 hover:bg-gray-100/50 transition-all border border-gray-200">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Circle className="w-4 h-4 text-blue-600" />
+                    <span className="text-gray-700 text-xs font-medium">Steps</span>
+                  </div>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-2xl font-bold text-gray-900">{stats.steps.value.toLocaleString()}</span>
+                  </div>
+                </div>
+
+                <div className="bg-gray-50 rounded-xl p-3 hover:bg-gray-100/50 transition-all border border-gray-200">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Thermometer className="w-4 h-4 text-orange-600" />
+                    <span className="text-gray-700 text-xs font-medium">Temp</span>
+                  </div>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-2xl font-bold text-gray-900">{stats.temp.value}°</span>
+                  </div>
+                </div>
+
+                <div className="bg-gray-50 rounded-xl p-3 hover:bg-gray-100/50 transition-all border border-gray-200">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Zap className="w-4 h-4 text-yellow-600" />
+                    <span className="text-gray-700 text-xs font-medium">Calories</span>
+                  </div>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-2xl font-bold text-gray-900">{stats.calories.value}</span>
+                  </div>
+                </div>
+
+                <div className="bg-gray-50 rounded-xl p-3 hover:bg-gray-100/50 transition-all border border-gray-200">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Timer className="w-4 h-4 text-purple-600" />
+                    <span className="text-gray-700 text-xs font-medium">Stress</span>
+                  </div>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-2xl font-bold text-gray-900">{stats.stress.value}</span>
+                    <span className="text-gray-600 text-xs">low</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Enhanced How It Works Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4">How It Works</h2>
-            <p className="text-xl text-gray-600">Three simple steps to better health monitoring</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-16 relative">
-            {steps.map((step, index) => (
-              <StepCard key={step.id} step={step} index={index} />
-            ))}
-          </div>
+      {/* How It Works Section */}
+<section className="py-16 bg-white">
+  <div className="max-w-7xl mx-auto px-6">
+    <div className="text-center mb-12">
+      <h2 className="text-4xl font-bold mb-4">How It Works</h2>
+      <p className="text-xl text-gray-600">Three simple steps to better health monitoring</p>
+    </div>
 
-          <div className="mt-12 text-center">
-            <button className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-8 py-3 rounded-xl hover:shadow-lg transition-all duration-300 flex items-center justify-center mx-auto">
-              <span>Get Started</span>
-              <ChevronRight size={20} className="ml-2" />
-            </button>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
+      {steps.map((step, index) => (
+        <div
+          key={step.id}
+          className="p-6 rounded-2xl bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 border border-[#20B2AA]/20"
+        >
+          <div className="flex items-start space-x-4">
+            <div className={`${step.color} p-4 rounded-xl text-white`}>
+              <step.icon size={24} />
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xl font-semibold">{step.title}</h3>
+                <span className="text-gray-400">
+                  <Clock size={16} className="inline mr-1" />
+                  {step.stats}
+                </span>
+              </div>
+              <p className="mt-2 text-gray-600">{step.description}</p>
+              <div className="mt-4 space-y-3">
+                {step.substeps.map((substep, idx) => (
+                  <div key={idx} className="flex items-center space-x-2 text-gray-700">
+                    <CheckCircle size={16} className="text-green-500" />
+                    <span>{substep}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
-      </section>
+      ))}
+    </div>
+  </div>
+</section>
 
       {/* Why Choose Us Section */}
       <section className="py-16 bg-gray-50">
@@ -240,7 +373,7 @@ const HomePage = () => {
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-4xl font-bold text-center mb-4">Insights and Resources</h2>
           <p className="text-xl text-gray-600 text-center mb-12">Stay informed about your health journey</p>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="group hover:scale-105 transition-all duration-300">
               <div className="bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 rounded-2xl overflow-hidden border border-[#20B2AA]/20">
@@ -256,7 +389,7 @@ const HomePage = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="group hover:scale-105 transition-all duration-300">
               <div className="bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 rounded-2xl overflow-hidden border border-[#20B2AA]/20">
                 <div className="h-48 bg-[#008B8B]/5 flex items-center justify-center">
@@ -271,7 +404,7 @@ const HomePage = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="group hover:scale-105 transition-all duration-300">
               <div className="bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 rounded-2xl overflow-hidden border border-[#20B2AA]/20">
                 <div className="h-48 bg-[#008B8B]/5 flex items-center justify-center">
@@ -315,7 +448,7 @@ const HomePage = () => {
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-4xl font-bold text-center mb-4">Designed for Everyone</h2>
           <p className="text-xl text-gray-600 text-center mb-12">Making health monitoring accessible to all</p>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="flex gap-6 items-start p-6 bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 rounded-xl border border-[#20B2AA]/20">
               <div className="bg-gradient-to-r from-[#008B8B] to-[#20B2AA] p-3 rounded-lg text-white">
@@ -326,7 +459,7 @@ const HomePage = () => {
                 <p className="text-gray-600">Intuitive interface designed for users of all abilities, with screen reader support and customizable displays.</p>
               </div>
             </div>
-            
+
             <div className="flex gap-6 items-start p-6 bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 rounded-xl border border-[#20B2AA]/20">
               <div className="bg-gradient-to-r from-[#008B8B] to-[#20B2AA] p-3 rounded-lg text-white">
                 <Globe className="w-6 h-6" />
@@ -336,7 +469,7 @@ const HomePage = () => {
                 <p className="text-gray-600">Available in multiple languages with region-specific health guidelines and recommendations.</p>
               </div>
             </div>
-            
+
             <div className="flex gap-6 items-start p-6 bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 rounded-xl border border-[#20B2AA]/20">
               <div className="bg-gradient-to-r from-[#008B8B] to-[#20B2AA] p-3 rounded-lg text-white">
                 <Smartphone className="w-6 h-6" />
