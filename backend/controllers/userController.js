@@ -1,6 +1,8 @@
 const User = require('../models/User');
 
 const userController = {
+    // Existing methods remain the same
+
     // Get user profile
     getUserProfile: async (req, res) => {
         try {
@@ -37,52 +39,76 @@ const userController = {
         }
     },
 
-    // Add health data
-    addHealthData: async (req, res) => {
+    // Get user role
+    getUserRole: async (req, res) => {
         try {
-            const user = await User.findById(req.user.userId);
-            user.healthData.push(req.body);
-            await user.save();
-            res.status(201).json(user.healthData[user.healthData.length - 1]);
+            const user = await User.findById(req.user.userId).select('role');
+            if (!user) return res.status(404).json({ error: 'User not found' });
+            res.json({ role: user.role });
         } catch (error) {
-            res.status(500).json({ error: 'Failed to add health data' });
+            res.status(500).json({ error: 'Server error' });
         }
     },
 
-    // Get health data
-    getHealthData: async (req, res) => {
+    // Reset user password
+    resetPassword: async (req, res) => {
         try {
+            const { newPassword } = req.body;
             const user = await User.findById(req.user.userId);
-            res.json(user.healthData);
+            if (!user) return res.status(404).json({ error: 'User not found' });
+
+            // Replace with your password hashing logic
+            user.password = newPassword;
+            await user.save();
+            res.json({ message: 'Password updated successfully' });
         } catch (error) {
-            res.status(500).json({ error: 'Failed to retrieve health data' });
+            res.status(500).json({ error: 'Password reset failed' });
         }
     },
 
-    // Update health data
-    updateHealthData: async (req, res) => {
+    // Search users
+    searchUsers: async (req, res) => {
         try {
-            const user = await User.findById(req.user.userId);
-            const dataIndex = user.healthData.findIndex(data => data._id.toString() === req.params.id);
-            if (dataIndex === -1) return res.status(404).json({ error: 'Health data not found' });
-            
-            user.healthData[dataIndex] = { ...user.healthData[dataIndex], ...req.body };
-            await user.save();
-            res.json(user.healthData[dataIndex]);
+            const { query } = req.query;
+            const users = await User.find({
+                $or: [
+                    { username: { $regex: query, $options: 'i' } },
+                    { email: { $regex: query, $options: 'i' } }
+                ]
+            }).select('-password');
+            res.json(users);
         } catch (error) {
-            res.status(500).json({ error: 'Failed to update health data' });
+            res.status(500).json({ error: 'Search failed' });
         }
     },
 
-    // Delete health data
-    deleteHealthData: async (req, res) => {
+    // Paginated list of users
+    listUsers: async (req, res) => {
         try {
-            const user = await User.findById(req.user.userId);
-            user.healthData = user.healthData.filter(data => data._id.toString() !== req.params.id);
-            await user.save();
-            res.json({ message: 'Health data deleted successfully' });
+            const { page = 1, limit = 10 } = req.query;
+            const users = await User.find()
+                .skip((page - 1) * limit)
+                .limit(parseInt(limit))
+                .select('-password');
+            const total = await User.countDocuments();
+            res.json({ users, total, page: parseInt(page), limit: parseInt(limit) });
         } catch (error) {
-            res.status(500).json({ error: 'Failed to delete health data' });
+            res.status(500).json({ error: 'Failed to fetch users' });
+        }
+    },
+
+    // Deactivate user
+    deactivateUser: async (req, res) => {
+        try {
+            const user = await User.findByIdAndUpdate(
+                req.params.id,
+                { active: false },
+                { new: true }
+            ).select('-password');
+            if (!user) return res.status(404).json({ error: 'User not found' });
+            res.json({ message: 'User deactivated successfully', user });
+        } catch (error) {
+            res.status(500).json({ error: 'Deactivation failed' });
         }
     }
 };

@@ -1,6 +1,48 @@
+'use client';
+
 import React, { useState } from 'react';
-import { HeartPulse, Brain, Shield, Activity, Bot, Heart, Check, Stethoscope, Scale, 
-         ChevronRight, ArrowRight, Users, Bell, Clock } from 'lucide-react';
+import { 
+  HeartPulse, Brain, Shield, Activity, Bot, Heart, Check, Stethoscope, Scale, 
+  ChevronRight, ArrowRight, Users, Bell, Clock 
+} from 'lucide-react';
+
+const HeroSection = () => (
+  <section className="relative bg-gradient-to-br from-[#008B8B] via-[#009999] to-[#20B2AA] pt-24 pb-32">
+    <div className="absolute inset-0">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,_rgba(255,255,255,0.15)_1px,_transparent_0)] bg-[size:40px_40px]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-transparent" />
+    </div>
+
+    <div className="max-w-7xl mx-auto px-6 relative z-10">
+      <div className="grid lg:grid-cols-2 gap-12 items-center">
+        {/* Left Column - Content */}
+        <div>
+          <h1 className="text-6xl font-bold text-white mb-6 drop-shadow-md">
+            Seamless Health Monitoring
+            <span className="block mt-2 text-5xl bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-orange-700">
+              Empower Your Health Journey
+            </span>
+          </h1>
+          <p className="text-xl text-white/90 mb-8 leading-relaxed">
+            Explore advanced health features, from AI-powered predictions to real-time emergency alerts.
+          </p>
+          <button className="bg-[#FF7F50] text-white py-3 px-6 rounded-full hover:bg-[#FF6347] transition duration-300">
+            Get Started
+          </button>
+        </div>
+
+        {/* Right Column - Image */}
+        <div className="relative rounded-lg overflow-hidden">
+          <img
+            src="/iHealth-feature1.jpg"
+            alt="Health Monitoring Feature"
+            className="w-full h-full object-cover rounded-lg shadow-lg"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+);
 
 const TabButton = ({ active, children, onClick }) => (
   <button
@@ -31,10 +73,10 @@ const FeatureCard = ({ icon: Icon, title, description, features }) => (
         <div className="space-y-4">
           {features.map((feature, index) => (
             <div key={index} className="flex items-start gap-3 group/item hover:bg-[#008B8B]/5 p-2 rounded-lg transition-all">
-              <div className="bg-gradient-to-r from-[#FF7F50] to-[#FF6347] rounded-full p-1 group-hover/item:scale-110 transition-all">
+              <div className="bg-gradient-to-r from-[#FF7F50] to-[#FF6347] rounded-full p-1 group-hover:item:scale-110 transition-all">
                 <Check className="w-4 h-4 text-white" />
               </div>
-              <span className="text-gray-600 group-hover/item:text-[#008B8B] transition-colors">{feature}</span>
+              <span className="text-gray-600 group-hover:item:text-[#008B8B] transition-colors">{feature}</span>
             </div>
           ))}
         </div>
@@ -184,4 +226,11 @@ const FeaturesContent = () => {
   );
 };
 
-export default FeaturesContent;
+const Page = () => (
+  <main className="relative">
+    <HeroSection />
+    <FeaturesContent />
+  </main>
+);
+
+export default Page;

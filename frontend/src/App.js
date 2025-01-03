@@ -19,6 +19,12 @@ import HeartRateMonitorPage from './pages/dashboard/products/HeartRateMonitorPag
 import GuardianButtonPage from './pages/dashboard/products/GuardianButtonPage'; // Guardian Button page
 import ProductsPage from './pages/shop/Products.js';
 import YourNurse from './pages/dashboard/YourNurse'; // Import Your Nurse page
+import AdminDashboard from './pages/admin/AdminDashboard'; // Admin Dashboard
+import UserManagement from './pages/admin/UserManagement'; // Admin User Management
+import ServiceManagement from './pages/admin/ServiceManagement'; // Admin Service Management
+import Reports from './pages/admin/Reports'; // Admin Reports
+import Settings from './pages/admin/Settings'; // Admin Settings
+import Logs from './pages/admin/Logs'; // Admin Logs
 
 const App = () => {
   const [userSubscribed, setUserSubscribed] = useState(false); // Manage user subscription status
@@ -36,11 +42,12 @@ const App = () => {
 const AppContent = ({ userSubscribed, setUserSubscribed }) => {
   const location = useLocation(); // Get the current path
   const isDashboard = location.pathname.startsWith('/dashboard'); // Check if user is in dashboard
+  const isAdmin = location.pathname.startsWith('/admin'); // Check if user is in admin panel
 
   return (
     <div className="min-h-screen">
       {/* Conditionally render the correct header */}
-      {isDashboard ? <DashboardHeader /> : <Header />}
+      {isDashboard ? <DashboardHeader /> : isAdmin ? null : <Header />}
 
       <main className="pt-16 relative">
         <Routes>
@@ -63,6 +70,14 @@ const AppContent = ({ userSubscribed, setUserSubscribed }) => {
           <Route path="/dashboard/products/medDispenser" element={<MedicationDispenserPage />} />
           <Route path="/dashboard/products/heartMonitor" element={<HeartRateMonitorPage />} />
           <Route path="/dashboard/products/guardianButton" element={<GuardianButtonPage />} />
+
+          {/* Admin Routes */}
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/users" element={<UserManagement />} />
+          <Route path="/admin/services" element={<ServiceManagement />} />
+          <Route path="/admin/reports" element={<Reports />} />
+          <Route path="/admin/settings" element={<Settings />} />
+          <Route path="/admin/logs" element={<Logs />} />
         </Routes>
 
         {/* Subscription Toggle for Dashboard */}

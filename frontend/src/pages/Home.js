@@ -296,72 +296,108 @@ const HomePage = () => {
       </section>
 
       {/* Why Choose Us Section */}
-      <section className="py-16 bg-gray-50">
+<section className="py-16 bg-gray-50">
+  <div className="max-w-7xl mx-auto px-6">
+    <h2 className="text-4xl font-bold text-center mb-4">Why Choose iHealth-Sync?</h2>
+    <p className="text-xl text-gray-600 text-center mb-12">Experience the future of health monitoring</p>
+
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+      {/* Feature Cards Column */}
+      <div className="space-y-6">
+        <div className="bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 p-6 rounded-xl border border-[#20B2AA]/20 hover:shadow-lg transition-all">
+          <div className="flex items-start gap-4">
+            <div className="bg-gradient-to-r from-[#008B8B] to-[#20B2AA] p-3 rounded-lg text-white">
+              <Heart className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold mb-2">Real-Time Monitoring</h3>
+              <p className="text-gray-600">Advanced AI algorithms monitor your vital signs 24/7, providing instant alerts and personalized insights.</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 p-6 rounded-xl border border-[#20B2AA]/20 hover:shadow-lg transition-all">
+          <div className="flex items-start gap-4">
+            <div className="bg-gradient-to-r from-[#008B8B] to-[#20B2AA] p-3 rounded-lg text-white">
+              <Bell className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold mb-2">Smart Alerts</h3>
+              <p className="text-gray-600">Receive immediate notifications for critical health changes and emergency situations.</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 p-6 rounded-xl border border-[#20B2AA]/20 hover:shadow-lg transition-all">
+          <div className="flex items-start gap-4">
+            <div className="bg-gradient-to-r from-[#008B8B] to-[#20B2AA] p-3 rounded-lg text-white">
+              <UserPlus className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold mb-2">Family Connection</h3>
+              <p className="text-gray-600">Share health updates with family members and healthcare providers in real-time.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Image Column */}
+      <div className="flex justify-center items-center">
+        <img
+          src="/iHealth-home2.jpg"
+          alt="Why Choose iHealth-Sync"
+          className="rounded-xl shadow-lg object-cover h-[400px]"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+      {/* Dashboard Overview Section */}
+      <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center mb-4">Why Choose iHealth-Sync?</h2>
-          <p className="text-xl text-gray-600 text-center mb-12">Experience the future of health monitoring</p>
+          <h2 className="text-4xl font-bold text-center mb-4">Why the iHealth-Sync Dashboard Matters</h2>
+          <p className="text-xl text-gray-600 text-center mb-12">Your personalized health dashboard is the heart of your monitoring experience.</p>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            <div className="bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 p-8 rounded-2xl border border-[#20B2AA]/20">
-              <div className="bg-white/80 rounded-xl shadow-lg overflow-hidden">
-                <div className="p-4 bg-gradient-to-r from-[#008B8B] to-[#20B2AA] text-white">
-                  <h3 className="text-lg font-semibold">Health Dashboard</h3>
-                </div>
-                <div className="p-6">
-                  <div className="space-y-4">
-                    <div className="bg-gray-100 h-32 rounded-lg flex items-center justify-center">
-                      <span className="text-gray-500">Heart Rate Monitor</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-gray-100 h-24 rounded-lg flex items-center justify-center">
-                        <span className="text-gray-500">Blood Pressure</span>
-                      </div>
-                      <div className="bg-gray-100 h-24 rounded-lg flex items-center justify-center">
-                        <span className="text-gray-500">Sleep Analysis</span>
-                      </div>
-                    </div>
+            {/* Left Column - Explanation */}
+            <div>
+              <h3 className="text-2xl font-semibold text-[#008B8B] mb-4">Centralized Health Monitoring</h3>
+              <p className="text-gray-600 mb-4">
+                The iHealth-Sync Dashboard gives you a single, real-time view of all your vital health data. From heart rate and blood pressure to sleep patterns and activity levels, everything is tracked in one intuitive interface. It's designed to simplify your health journey and give you control over your well-being at a glance.
+              </p>
+              <p className="text-gray-600 mb-8">
+                With personalized recommendations, historical trend analysis, and seamless integration of AI-powered insights, you can stay ahead of your health and wellness goals.
+              </p>
+              <h4 className="text-xl font-semibold text-[#008B8B] mb-4">Why is it important?</h4>
+              <ul className="list-disc list-inside text-gray-600 mb-6">
+                <li>Monitor your health in real time</li>
+                <li>Track patterns and trends over time</li>
+                <li>Get tailored insights and health recommendations</li>
+                <li>Stay connected with your healthcare providers and family</li>
+              </ul>
+            </div>
+
+            {/* Right Column - Example Image */}
+            <div className="relative bg-gradient-to-br from-[#008B8B]/10 to-[#20B2AA]/20 p-8 rounded-2xl border border-[#20B2AA]/20">
+              <div className="relative z-10">
+                <h3 className="text-xl font-semibold text-white mb-4">Example: iHealth-Sync Dashboard</h3>
+                <p className="text-white mb-6">Here's an example of how the dashboard organizes and displays your key health metrics, making it easy to visualize your well-being and stay on top of your health journey.</p>
+                <div className="h-48 bg-[#008B8B]/30 rounded-lg overflow-hidden">
+                  {/* Placeholder for dashboard example */}
+                  <div className="flex items-center justify-center h-full bg-[#008B8B]/20">
+                    <span className="text-white">Dashboard Example Placeholder</span>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
 
-            <div className="space-y-6">
-              <div className="bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 p-6 rounded-xl border border-[#20B2AA]/20 hover:shadow-lg transition-all">
-                <div className="flex items-start gap-4">
-                  <div className="bg-gradient-to-r from-[#008B8B] to-[#20B2AA] p-3 rounded-lg text-white">
-                    <Heart className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold mb-2">Real-Time Monitoring</h3>
-                    <p className="text-gray-600">Advanced AI algorithms monitor your vital signs 24/7, providing instant alerts and personalized insights.</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 p-6 rounded-xl border border-[#20B2AA]/20 hover:shadow-lg transition-all">
-                <div className="flex items-start gap-4">
-                  <div className="bg-gradient-to-r from-[#008B8B] to-[#20B2AA] p-3 rounded-lg text-white">
-                    <Bell className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold mb-2">Smart Alerts</h3>
-                    <p className="text-gray-600">Receive immediate notifications for critical health changes and emergency situations.</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 p-6 rounded-xl border border-[#20B2AA]/20 hover:shadow-lg transition-all">
-                <div className="flex items-start gap-4">
-                  <div className="bg-gradient-to-r from-[#008B8B] to-[#20B2AA] p-3 rounded-lg text-white">
-                    <UserPlus className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold mb-2">Family Connection</h3>
-                    <p className="text-gray-600">Share health updates with family members and healthcare providers in real-time.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+          {/* Call to Action */}
+          <div className="text-center mt-12">
+            <button className="bg-[#FF7F50] text-white py-3 px-6 rounded-full hover:bg-[#FF6347] transition duration-300">
+              Explore Your Dashboard
+            </button>
           </div>
         </div>
       </section>
@@ -373,47 +409,50 @@ const HomePage = () => {
           <p className="text-xl text-gray-600 text-center mb-12">Stay informed about your health journey</p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* AI and Health Monitoring Card */}
             <div className="group hover:scale-105 transition-all duration-300">
               <div className="bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 rounded-2xl overflow-hidden border border-[#20B2AA]/20">
-                <div className="h-48 bg-[#008B8B]/5 flex items-center justify-center">
+                <div className="h-48 bg-[#008B8B]/20 rounded-t-2xl flex items-center justify-center">
                   <Settings className="w-16 h-16 text-[#008B8B]" />
                 </div>
                 <div className="p-6">
                   <h3 className="text-xl font-semibold mb-3">AI and Health Monitoring</h3>
                   <p className="text-gray-600 mb-4">Discover how artificial intelligence is revolutionizing personal healthcare monitoring.</p>
-                  <button className="text-[#008B8B] font-medium flex items-center gap-2 group-hover:gap-3 transition-all">
+                  <Link to="/ai-health-monitoring" className="text-[#008B8B] font-medium flex items-center gap-2 group-hover:gap-3 transition-all">
                     Learn More <ArrowRight className="w-4 h-4" />
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
 
+            {/* Managing Medications Card */}
             <div className="group hover:scale-105 transition-all duration-300">
               <div className="bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 rounded-2xl overflow-hidden border border-[#20B2AA]/20">
-                <div className="h-48 bg-[#008B8B]/5 flex items-center justify-center">
+                <div className="h-48 bg-[#008B8B]/20 rounded-t-2xl flex items-center justify-center">
                   <Bell className="w-16 h-16 text-[#008B8B]" />
                 </div>
                 <div className="p-6">
                   <h3 className="text-xl font-semibold mb-3">Managing Medications</h3>
                   <p className="text-gray-600 mb-4">Expert tips and digital tools for maintaining your medication schedule effectively.</p>
-                  <button className="text-[#008B8B] font-medium flex items-center gap-2 group-hover:gap-3 transition-all">
+                  <Link to="/managing-medications" className="text-[#008B8B] font-medium flex items-center gap-2 group-hover:gap-3 transition-all">
                     Learn More <ArrowRight className="w-4 h-4" />
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
 
+            {/* Understanding Vitals Card */}
             <div className="group hover:scale-105 transition-all duration-300">
               <div className="bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 rounded-2xl overflow-hidden border border-[#20B2AA]/20">
-                <div className="h-48 bg-[#008B8B]/5 flex items-center justify-center">
+                <div className="h-48 bg-[#008B8B]/20 rounded-t-2xl flex items-center justify-center">
                   <Heart className="w-16 h-16 text-[#008B8B]" />
                 </div>
                 <div className="p-6">
                   <h3 className="text-xl font-semibold mb-3">Understanding Vitals</h3>
                   <p className="text-gray-600 mb-4">Comprehensive guide to interpreting your vital signs and health metrics.</p>
-                  <button className="text-[#008B8B] font-medium flex items-center gap-2 group-hover:gap-3 transition-all">
+                  <Link to="/understanding-vitals" className="text-[#008B8B] font-medium flex items-center gap-2 group-hover:gap-3 transition-all">
                     Learn More <ArrowRight className="w-4 h-4" />
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>

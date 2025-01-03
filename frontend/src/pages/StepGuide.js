@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Download,
   Star,
@@ -8,47 +8,69 @@ import {
   Stethoscope,
   ChevronRight,
   CheckCircle2,
+  Info,
+  ArrowRight,
 } from 'lucide-react';
 
-const StepCard = ({ step, index }) => (
-  <div className="bg-white rounded-2xl p-8 border border-gray-200 relative">
-    <div className="absolute top-4 right-4 w-12 h-12 rounded-full bg-[#008B8B]/10 flex items-center justify-center">
-      <span className="text-[#008B8B] font-bold">0{index + 1}</span>
+const StepCard = ({ step, index, isExpanded, onExpand }) => (
+  <div 
+    className={`bg-white rounded-2xl border border-gray-200 transition-all duration-300 ${
+      isExpanded ? 'shadow-lg scale-105' : 'hover:shadow-md'
+    }`}
+  >
+    {/* Card Header */}
+    <div className="p-6 border-b border-gray-100">
+      <div className="flex items-start gap-4">
+        <div className="relative">
+          <div className="w-14 h-14 bg-[#A390E4]/10 rounded-xl flex items-center justify-center">
+            <step.icon className="w-7 h-7 text-[#A390E4]" />
+          </div>
+          <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-[#10B981] text-white flex items-center justify-center text-sm font-bold">
+            {index + 1}
+          </div>
+        </div>
+        <div className="flex-1">
+          <h2 className="text-xl font-bold text-gray-900 mb-1">{step.title}</h2>
+          <p className="text-sm text-gray-600">{step.description}</p>
+        </div>
+      </div>
     </div>
 
-    <div className="flex items-center gap-4 mb-6">
-      <div className="w-12 h-12 bg-[#008B8B]/10 rounded-xl flex items-center justify-center">
-        <step.icon className="w-6 h-6 text-[#008B8B]" />
-      </div>
-      <div>
-        <h2 className="text-xl font-bold text-gray-900">{step.title}</h2>
-        <p className="text-gray-600">{step.description}</p>
-      </div>
-    </div>
-
-    {step.features && (
-      <div className="grid sm:grid-cols-2 gap-4 mb-6">
-        {step.features.map((feature, idx) => (
-          <div key={idx} className="flex items-center gap-2">
-            <CheckCircle2 className="w-5 h-5 text-[#008B8B]" />
-            <span className="text-gray-600">{feature}</span>
+    {/* Card Body */}
+    <div className="p-6 space-y-6">
+      {/* Features List */}
+      <div className="space-y-3">
+        {step.features?.map((feature, idx) => (
+          <div key={idx} className="flex items-start gap-2">
+            <CheckCircle2 className="w-5 h-5 text-[#A390E4] shrink-0 mt-0.5" />
+            <span className="text-sm text-gray-600">{feature}</span>
           </div>
         ))}
       </div>
-    )}
 
-    <button className="bg-[#008B8B] text-white px-6 py-3 rounded-xl hover:bg-[#20B2AA] transition-colors flex items-center gap-2">
-      {step.action}
-      <ChevronRight className="w-4 h-4" />
-    </button>
-
-    {step.cost && (
-      <div className="absolute bottom-4 right-4 text-sm text-gray-500">{step.cost}</div>
-    )}
+      {/* Action Button */}
+      <div className="flex items-center justify-between">
+        <button 
+          onClick={() => onExpand(index)}
+          className="bg-[#10B981] text-white px-6 py-3 rounded-xl hover:bg-[#20B2AA] transition-colors flex items-center gap-2"
+        >
+          {step.action}
+          <ArrowRight className="w-4 h-4" />
+        </button>
+        {step.cost && (
+          <div className="text-sm">
+            <span className="text-gray-500">From</span>
+            <span className="ml-1 font-semibold text-[#10B981]">{step.cost}</span>
+          </div>
+        )}
+      </div>
+    </div>
   </div>
 );
 
 const StepGuide = () => {
+  const [expandedStep, setExpandedStep] = useState(null);
+
   const steps = [
     {
       step: 1,
@@ -56,13 +78,13 @@ const StepGuide = () => {
       icon: Download,
       description: "Download iHealth-Sync app from your device's app store",
       features: [
-        'Basic health monitoring',
-        'Single emergency contact',
-        'Standard SOS alerts',
-        'Basic dashboard',
+        'Basic health monitoring dashboard',
+        'Single emergency contact setup',
+        'Standard SOS alerts system',
+        'Basic health tracking features',
       ],
       action: 'Download Free',
-      cost: 'Free',
+      cost: 'Free'
     },
     {
       step: 2,
@@ -70,106 +92,128 @@ const StepGuide = () => {
       icon: Star,
       description: 'Unlock full platform capabilities with premium subscription',
       features: [
-        'AI-powered health monitoring',
-        'Up to 5 emergency contacts',
-        'Advanced health analytics',
-        'Access to all devices',
+        'AI-powered health monitoring and insights',
+        'Up to 5 emergency contacts with priority alerts',
+        'Advanced health analytics and reporting',
+        'Full access to all monitoring devices',
       ],
       action: 'Upgrade Now',
-      cost: '€4.99/month',
+      cost: '€4.99/mo'
     },
     {
       step: 3,
-      title: 'Add Basic Monitoring',
+      title: 'Basic Health Monitoring',
       icon: Shield,
       description: 'Essential devices for safety and basic health tracking',
       features: [
-        'Guardian Button for emergencies',
-        'Heart Rate Monitor',
-        'Family Dashboard integration',
-        'Real-time monitoring',
+        'Guardian Button for instant emergency alerts',
+        'Heart Rate Monitor with real-time tracking',
+        'Family Dashboard with live updates',
+        '24/7 basic monitoring service',
       ],
       action: 'View Devices',
+      cost: '€9.99/mo'
     },
     {
       step: 4,
-      title: 'Enhanced Health Monitoring',
+      title: 'Advanced Health Tracking',
       icon: Activity,
-      description: 'Additional devices for comprehensive health tracking',
+      description: 'Comprehensive health monitoring system',
       features: [
-        'Smart Scales integration',
-        'Temperature monitoring',
-        'Sleep quality tracking',
-        'Advanced analytics',
+        'Smart Scale with body composition analysis',
+        'Temperature monitoring with alerts',
+        'Advanced sleep quality tracking',
+        'Detailed health analytics dashboard',
       ],
       action: 'Explore Devices',
+      cost: '€14.99/mo'
     },
     {
       step: 5,
-      title: 'Professional Monitoring',
+      title: 'Professional Care',
       icon: Pill,
       description: 'Expert monitoring services for specialized care',
       features: [
-        'Medication management',
-        'Professional oversight',
-        'Health data analysis',
-        'Expert support team',
+        'Smart Medication Management System',
+        'Professional health oversight',
+        'Monthly health data analysis',
+        'Priority support team access',
       ],
       action: 'Add Services',
+      cost: '€19.99/mo'
     },
     {
       step: 6,
-      title: 'Premium Care Services',
+      title: 'Premium Healthcare',
       icon: Stethoscope,
-      description: 'Additional professional support services',
+      description: 'Complete professional healthcare support',
       features: [
-        '24/7 emergency response',
-        'Professional monitoring',
-        'Dedicated nursing support',
-        'Virtual consultations',
+        '24/7 emergency response system',
+        'Professional medical monitoring',
+        'On-demand nursing support',
+        'Unlimited virtual consultations',
       ],
       action: 'Explore Care',
-    },
+      cost: '€29.99/mo'
+    }
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-20">
-      <div className="max-w-4xl mx-auto px-6">
-        <div className="text-center mb-16">
-          <h1 className="text-4xl font-bold mb-4">Join iHealth-Sync</h1>
-          <p className="text-xl text-gray-600">
-            Follow these steps to build your personalized health monitoring system
-          </p>
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-[#008B8B] to-[#20B2AA] py-20">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center text-white">
+            <h1 className="text-4xl font-bold mb-4">Build Your Health Monitoring System</h1>
+            <p className="text-xl opacity-90 max-w-2xl mx-auto">
+              Follow our simple step-by-step guide to create your personalized healthcare solution
+            </p>
+          </div>
         </div>
+      </section>
 
-        <div className="space-y-8">
-          {steps.map((step, index) => (
-            <StepCard key={index} step={step} index={index} />
-          ))}
-        </div>
+      {/* Main Content */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {steps.map((step, index) => (
+              <StepCard 
+                key={index} 
+                step={step} 
+                index={index}
+                isExpanded={expandedStep === index}
+                onExpand={setExpandedStep}
+              />
+            ))}
+          </div>
 
-        <div className="mt-8 bg-white rounded-xl p-6 border border-gray-200">
-          <h3 className="font-bold mb-4">Important Notes:</h3>
-          <ul className="space-y-2 text-gray-600">
-            <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-[#008B8B]" />
-              Premium subscription required for all devices
-            </li>
-            <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-[#008B8B]" />
-              Professional services can be subscribed independently
-            </li>
-            <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-[#008B8B]" />
-              All devices include shipping and setup support
-            </li>
-            <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-[#008B8B]" />
-              No long-term commitments - cancel anytime
-            </li>
-          </ul>
+          {/* Important Notes */}
+          <div className="mt-12 bg-white rounded-xl p-6 border border-gray-200">
+            <div className="flex items-center gap-2 mb-4">
+              <Info className="w-5 h-5 text-[#008B8B]" />
+              <h3 className="font-bold text-gray-900">Important Information</h3>
+            </div>
+            <ul className="grid md:grid-cols-2 gap-4">
+              <li className="flex items-center gap-2">
+                <CheckCircle2 className="w-5 h-5 text-[#008B8B]" />
+                <span className="text-gray-600">Premium subscription required for all devices</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle2 className="w-5 h-5 text-[#008B8B]" />
+                <span className="text-gray-600">Professional services available independently</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle2 className="w-5 h-5 text-[#008B8B]" />
+                <span className="text-gray-600">All devices include setup support</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle2 className="w-5 h-5 text-[#008B8B]" />
+                <span className="text-gray-600">Monthly billing - cancel anytime</span>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 };
