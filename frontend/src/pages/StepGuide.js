@@ -11,6 +11,7 @@ import {
   Info,
   ArrowRight,
 } from 'lucide-react';
+import Header from '../components/Header'; // Importing the header component
 
 const StepCard = ({ step, index, isExpanded, onExpand }) => (
   <div 
@@ -84,7 +85,7 @@ const StepGuide = () => {
         'Basic health tracking features',
       ],
       action: 'Download Free',
-      cost: 'Free'
+      cost: 'Free',
     },
     {
       step: 2,
@@ -98,7 +99,7 @@ const StepGuide = () => {
         'Full access to all monitoring devices',
       ],
       action: 'Upgrade Now',
-      cost: '€4.99/mo'
+      cost: '€4.99/mo',
     },
     {
       step: 3,
@@ -112,7 +113,7 @@ const StepGuide = () => {
         '24/7 basic monitoring service',
       ],
       action: 'View Devices',
-      cost: '€9.99/mo'
+      cost: '€9.99/mo',
     },
     {
       step: 4,
@@ -126,7 +127,7 @@ const StepGuide = () => {
         'Detailed health analytics dashboard',
       ],
       action: 'Explore Devices',
-      cost: '€14.99/mo'
+      cost: '€14.99/mo',
     },
     {
       step: 5,
@@ -140,7 +141,7 @@ const StepGuide = () => {
         'Priority support team access',
       ],
       action: 'Add Services',
-      cost: '€19.99/mo'
+      cost: '€19.99/mo',
     },
     {
       step: 6,
@@ -154,66 +155,72 @@ const StepGuide = () => {
         'Unlimited virtual consultations',
       ],
       action: 'Explore Care',
-      cost: '€29.99/mo'
-    }
+      cost: '€29.99/mo',
+    },
   ];
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-[#008B8B] to-[#20B2AA] py-20">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center text-white">
-            <h1 className="text-4xl font-bold mb-4">Build Your Health Monitoring System</h1>
-            <p className="text-xl opacity-90 max-w-2xl mx-auto">
-              Follow our simple step-by-step guide to create your personalized healthcare solution
-            </p>
-          </div>
-        </div>
-      </section>
+      {/* Header */}
+      <Header />
 
-      {/* Main Content */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {steps.map((step, index) => (
-              <StepCard 
-                key={index} 
-                step={step} 
-                index={index}
-                isExpanded={expandedStep === index}
-                onExpand={setExpandedStep}
-              />
-            ))}
-          </div>
-
-          {/* Important Notes */}
-          <div className="mt-12 bg-white rounded-xl p-6 border border-gray-200">
-            <div className="flex items-center gap-2 mb-4">
-              <Info className="w-5 h-5 text-[#008B8B]" />
-              <h3 className="font-bold text-gray-900">Important Information</h3>
+      {/* Add padding to avoid header overlap */}
+      <div className="pt-20">
+        {/* Hero Section */}
+        <section className="bg-gradient-to-br from-[#008B8B] to-[#20B2AA] py-20">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center text-white">
+              <h1 className="text-4xl font-bold mb-4">Build Your Health Monitoring System</h1>
+              <p className="text-xl opacity-90 max-w-2xl mx-auto">
+                Follow our simple step-by-step guide to create your personalized healthcare solution
+              </p>
             </div>
-            <ul className="grid md:grid-cols-2 gap-4">
-              <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5 text-[#008B8B]" />
-                <span className="text-gray-600">Premium subscription required for all devices</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5 text-[#008B8B]" />
-                <span className="text-gray-600">Professional services available independently</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5 text-[#008B8B]" />
-                <span className="text-gray-600">All devices include setup support</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5 text-[#008B8B]" />
-                <span className="text-gray-600">Monthly billing - cancel anytime</span>
-              </li>
-            </ul>
           </div>
-        </div>
-      </section>
+        </section>
+
+        {/* Main Content */}
+        <section className="py-20">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {steps.map((step, index) => (
+                <StepCard 
+                  key={index} 
+                  step={step} 
+                  index={index}
+                  isExpanded={expandedStep === index}
+                  onExpand={setExpandedStep}
+                />
+              ))}
+            </div>
+
+            {/* Important Notes */}
+            <div className="mt-12 bg-white rounded-xl p-6 border border-gray-200">
+              <div className="flex items-center gap-2 mb-4">
+                <Info className="w-5 h-5 text-[#008B8B]" />
+                <h3 className="font-bold text-gray-900">Important Information</h3>
+              </div>
+              <ul className="grid md:grid-cols-2 gap-4">
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-[#008B8B]" />
+                  <span className="text-gray-600">Premium subscription required for all devices</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-[#008B8B]" />
+                  <span className="text-gray-600">Professional services available independently</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-[#008B8B]" />
+                  <span className="text-gray-600">All devices include setup support</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-[#008B8B]" />
+                  <span className="text-gray-600">Monthly billing - cancel anytime</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </div>
     </div>
   );
 };

@@ -1,126 +1,94 @@
-import React, { useState, useEffect } from 'react';
-// Temporarily replace with placeholder if needed to debug
-import DashboardHeader from '../../components/mobile/DashboardHeader';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Bell, User } from 'lucide-react';
+import Logo from '../Logo'; // Importing the Logo component
 
-const Dashboard = () => {
-  const [currentTime, setCurrentTime] = useState(new Date());
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const formattedTime = currentTime.toLocaleTimeString('en-US', {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-  });
-
-  const formattedDate = currentTime.toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-
+const DashboardHeader = () => {
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Replace this with <div>Header Placeholder</div> to test */}
-      <DashboardHeader />
-      <main className="max-w-screen-xl mx-auto px-6 py-8">
-        {/* Welcome Section */}
-        <section className="bg-gradient-to-r from-[#008B8B] to-[#20B2AA] text-white shadow-lg rounded-lg p-8 mb-8">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-4xl font-bold">Welcome back, Patrick</h1>
-              <p className="text-lg mt-2">
-                Today is {formattedDate}, and the current time is {formattedTime}.
-              </p>
-              <p className="mt-4">
-                iHealth-Sync is proud to collaborate with MobileCare to enhance healthcare services and connectivity.
-              </p>
-            </div>
-            <div className="flex flex-col items-end">
-              <div className="bg-white text-[#008B8B] p-4 rounded-lg shadow-md">
-                <p className="text-lg font-bold">Quick Overview</p>
-                <ul className="mt-2 space-y-1">
-                  <li>Active Clients: <strong>245</strong></li>
-                  <li>Pending Tickets: <strong>5</strong></li>
-                  <li>Connected Products: <strong>87%</strong></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </section>
+    <header className="bg-[#008B8B] text-white py-4 fixed top-0 left-0 right-0 shadow z-50">
+      <div className="max-w-screen-xl mx-auto px-6 flex items-center justify-between">
+        {/* Logo Section */}
+        <div className="flex items-center space-x-3">
+          <Link to="/mobile-dashboard"> {/* Logo links to Dashboard */}
+            <Logo className="w-10 h-10" /> {/* Displaying the logo */}
+          </Link>
+        </div>
 
-        {/* Grid Layout for Main Features */}
-        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[
-            {
-              title: 'Clients Overview',
-              description: 'Track and manage all your active clients and their services.',
-              buttonText: 'View Clients',
-              bgColor: '#008B8B',
-              hoverColor: '#20B2AA',
-            },
-            {
-              title: 'Products Status',
-              description: 'Monitor and resolve device connectivity issues in real-time.',
-              buttonText: 'View Products',
-              bgColor: '#FF7F50',
-              hoverColor: '#FF6347',
-            },
-            {
-              title: 'Messages & Communication',
-              description: 'Communicate with clients, staff, and teams efficiently.',
-              buttonText: 'View Messages',
-              bgColor: '#008B8B',
-              hoverColor: '#20B2AA',
-            },
-            {
-              title: 'Tickets Summary',
-              description: 'Manage and track issues raised, from open to resolution.',
-              buttonText: 'View Tickets',
-              bgColor: '#FF7F50',
-              hoverColor: '#FF6347',
-            },
-            {
-              title: 'Reports & Analytics',
-              description: 'Gain insights into operations and performance trends.',
-              buttonText: 'View Reports',
-              bgColor: '#008B8B',
-              hoverColor: '#20B2AA',
-            },
-            {
-              title: 'AI Mobile-Care Guardian',
-              description: 'Ask questions, get insights, and streamline your decisions.',
-              buttonText: 'Interact with AI',
-              bgColor: '#FF7F50',
-              hoverColor: '#FF6347',
-            },
-          ].map((card, index) => (
-            <div key={index} className="bg-white shadow-lg rounded-lg p-6">
-              <h2 className="text-xl font-semibold text-gray-800">{card.title}</h2>
-              <p className="text-gray-600 mt-2">{card.description}</p>
-              <button
-                className={`mt-4 text-white px-4 py-2 rounded-lg`}
-                style={{
-                  backgroundColor: card.bgColor,
-                  transition: 'background-color 0.3s',
-                }}
-                onMouseOver={(e) => (e.currentTarget.style.backgroundColor = card.hoverColor)}
-                onMouseOut={(e) => (e.currentTarget.style.backgroundColor = card.bgColor)}
+        {/* Navigation Links */}
+        <nav className="hidden md:flex space-x-6">
+          <Link
+            to="/mobile-dashboard/clients"
+            className="hover:text-gray-300 transition"
+          >
+            Clients
+          </Link>
+          <Link
+            to="/mobile-dashboard/products"
+            className="hover:text-gray-300 transition"
+          >
+            Products
+          </Link>
+          <Link
+            to="/mobile-dashboard/messages"
+            className="hover:text-gray-300 transition"
+          >
+            Messages
+          </Link>
+          <Link
+            to="/mobile-dashboard/tickets"
+            className="hover:text-gray-300 transition"
+          >
+            Tickets
+          </Link>
+          <Link
+            to="/mobile-dashboard/reports"
+            className="hover:text-gray-300 transition"
+          >
+            Reports
+          </Link>
+        </nav>
+
+        {/* Actions Section */}
+        <div className="flex items-center space-x-4">
+          {/* Notifications */}
+          <button className="relative hover:text-gray-300">
+            <Bell className="w-6 h-6" />
+            <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+              3
+            </span>
+          </button>
+
+          {/* User Menu */}
+          <div className="relative group">
+            <button className="flex items-center space-x-2 hover:text-gray-300">
+              <User className="w-6 h-6" />
+              <span className="hidden md:inline">Profile</span>
+            </button>
+            <div className="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
+              <Link
+                to="/mobile-dashboard/profile"
+                className="block px-4 py-2 hover:bg-gray-100"
               >
-                {card.buttonText}
+                My Profile
+              </Link>
+              <Link
+                to="/mobile-dashboard/settings"
+                className="block px-4 py-2 hover:bg-gray-100"
+              >
+                Settings
+              </Link>
+              <button
+                onClick={() => alert('Logging out')}
+                className="block px-4 py-2 w-full text-left hover:bg-gray-100"
+              >
+                Logout
               </button>
             </div>
-          ))}
-        </section>
-      </main>
-    </div>
+          </div>
+        </div>
+      </div>
+    </header>
   );
 };
 
-export default Dashboard;
+export default DashboardHeader;

@@ -5,6 +5,7 @@ import {
   HeartPulse, Brain, Shield, Activity, Bot, Heart, Check, Stethoscope, Scale, 
   ChevronRight, ArrowRight, Users, Bell, Clock 
 } from 'lucide-react';
+import Header from '../components/Header'; // Ensure Header is imported
 
 const HeroSection = () => (
   <section className="relative bg-gradient-to-br from-[#008B8B] via-[#009999] to-[#20B2AA] pt-24 pb-32">
@@ -15,7 +16,6 @@ const HeroSection = () => (
 
     <div className="max-w-7xl mx-auto px-6 relative z-10">
       <div className="grid lg:grid-cols-2 gap-12 items-center">
-        {/* Left Column - Content */}
         <div>
           <h1 className="text-6xl font-bold text-white mb-6 drop-shadow-md">
             Seamless Health Monitoring
@@ -31,7 +31,6 @@ const HeroSection = () => (
           </button>
         </div>
 
-        {/* Right Column - Image */}
         <div className="relative rounded-lg overflow-hidden">
           <img
             src="/iHealth-feature1.jpg"
@@ -227,10 +226,13 @@ const FeaturesContent = () => {
 };
 
 const Page = () => (
-  <main className="relative">
-    <HeroSection />
-    <FeaturesContent />
-  </main>
+  <div>
+    <Header /> {/* Adding the Header component */}
+    <main className="relative pt-16"> {/* Adjust padding for Header */}
+      <HeroSection />
+      <FeaturesContent />
+    </main>
+  </div>
 );
 
 export default Page;
