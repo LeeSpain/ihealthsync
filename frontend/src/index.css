@@ -9,7 +9,7 @@ body {
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f9fafb; /* Light background color for the body */
+  background-color: #f9fafb; /* Light gray background color for the body */
 }
 
 code {
@@ -17,27 +17,32 @@ code {
   background-color: #f3f4f6; /* Slightly darker gray for code blocks */
   padding: 2px 4px;
   border-radius: 4px;
-  color: #d1d5db; /* Light gray text for code */
+  color: #374151; /* Updated to darker gray for better readability */
 }
 
 /* Custom Components */
 @layer components {
+  /* Primary Button */
   .btn-primary {
     @apply bg-[#FF7F50] text-white px-6 py-3 rounded-xl hover:bg-[#FF6347] transition-colors flex items-center gap-2;
   }
 
+  /* Secondary Button */
   .btn-secondary {
     @apply bg-white/10 text-white px-6 py-3 rounded-xl hover:bg-white/20 transition-colors flex items-center gap-2;
   }
 
+  /* Feature Card */
   .feature-card {
     @apply bg-white rounded-xl border border-gray-100 hover:shadow-lg transition-all p-6;
   }
 
+  /* Feature Icon */
   .feature-icon {
     @apply bg-[#008B8B] rounded-xl p-3 text-white;
   }
 
+  /* Tab Button */
   .tab-button {
     @apply px-6 py-3 rounded-xl flex items-center gap-2 transition-all;
   }

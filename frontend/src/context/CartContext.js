@@ -16,6 +16,7 @@ export const useCart = () => {
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
 
+  // Add item to the cart or update its quantity
   const addToCart = (product, quantity = 1) => {
     setCartItems((prev) => {
       const existing = prev.find((item) => item.id === product.id);
@@ -30,23 +31,28 @@ export const CartProvider = ({ children }) => {
     });
   };
 
+  // Remove item from the cart
   const removeFromCart = (productId) => {
     setCartItems((prev) => prev.filter((item) => item.id !== productId));
   };
 
+  // Update item quantity in the cart
   const updateCartQuantity = (productId, quantity) => {
     setCartItems((prev) =>
       prev.map((item) =>
-        item.id === productId ? { ...item, quantity: Math.max(0, quantity) } : item
+        item.id === productId
+          ? { ...item, quantity: Math.max(0, quantity) }
+          : item
       )
     );
   };
 
+  // Calculate cart totals
   const calculateTotals = () => {
     return cartItems.reduce(
       (totals, item) => ({
         subtotal: totals.subtotal + parseFloat(item.price || 0) * item.quantity,
-        monthly: totals.monthly + parseFloat(item.monthlyFee) * item.quantity,
+        monthly: totals.monthly + parseFloat(item.monthlyFee || 0) * item.quantity,
       }),
       { subtotal: 0, monthly: 0 }
     );
