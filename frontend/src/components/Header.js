@@ -8,7 +8,7 @@ const Header = () => {
       <div className="max-w-screen-xl mx-auto px-6 flex items-center justify-between">
         {/* Logo on the left */}
         <div className="text-white text-2xl font-bold flex items-center space-x-2">
-          <Link to="/">
+          <Link to="/home">
             <Logo />
           </Link>
         </div>
@@ -17,7 +17,9 @@ const Header = () => {
         <nav className="flex space-x-6 text-white mx-auto">
           <Link to="/features" className="hover:text-gray-300">Features</Link>
           <Link to="/step-guide" className="hover:text-gray-300">Step Guide</Link>
-          <Link to="/pricing" className="hover:text-gray-300">Pricing</Link>
+          <Link to="/productsHomepage" className="hover:text-gray-300">Products</Link> {/* Updated Path */}
+          <Link to="/pricing" className="hover:text-gray-300">Prices</Link>
+          <Link to="/dashboards" className="hover:text-gray-300">Dashboard</Link>
         </nav>
 
         {/* Login and Sign Up buttons */}

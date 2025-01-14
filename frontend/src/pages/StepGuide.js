@@ -1,228 +1,289 @@
-import React, { useState } from 'react';
-import {
-  Download,
-  Star,
-  Shield,
-  Activity,
-  Pill,
-  Stethoscope,
-  ChevronRight,
-  CheckCircle2,
-  Info,
-  ArrowRight,
-} from 'lucide-react';
-import Header from '../components/Header'; // Importing the header component
+'use client';
 
-const StepCard = ({ step, index, isExpanded, onExpand }) => (
-  <div 
-    className={`bg-white rounded-2xl border border-gray-200 transition-all duration-300 ${
-      isExpanded ? 'shadow-lg scale-105' : 'hover:shadow-md'
-    }`}
-  >
-    {/* Card Header */}
-    <div className="p-6 border-b border-gray-100">
-      <div className="flex items-start gap-4">
-        <div className="relative">
-          <div className="w-14 h-14 bg-[#A390E4]/10 rounded-xl flex items-center justify-center">
-            <step.icon className="w-7 h-7 text-[#A390E4]" />
-          </div>
-          <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-[#10B981] text-white flex items-center justify-center text-sm font-bold">
-            {index + 1}
-          </div>
-        </div>
-        <div className="flex-1">
-          <h2 className="text-xl font-bold text-gray-900 mb-1">{step.title}</h2>
-          <p className="text-sm text-gray-600">{step.description}</p>
-        </div>
-      </div>
-    </div>
-
-    {/* Card Body */}
-    <div className="p-6 space-y-6">
-      {/* Features List */}
-      <div className="space-y-3">
-        {step.features?.map((feature, idx) => (
-          <div key={idx} className="flex items-start gap-2">
-            <CheckCircle2 className="w-5 h-5 text-[#A390E4] shrink-0 mt-0.5" />
-            <span className="text-sm text-gray-600">{feature}</span>
-          </div>
-        ))}
+import React from "react";
+import { 
+  Download, Star, ShieldCheck, Users, Heart, Scale, Thermometer, 
+  ArrowRight, Smartphone, CheckCircle2, ChevronRight, Check 
+} from "lucide-react";
+import Header from "../components/Header";
+// Enhanced StepBox with Connection Lines
+const StepBox = ({ stepNumber, title, description, features, icon, isLast }) => (
+  <div className="relative">
+    {/* Connection Line */}
+    {!isLast && (
+      <div className="absolute left-[47px] top-[120px] w-1 h-24 bg-gradient-to-b from-[#008B8B] to-[#20B2AA]" />
+    )}
+    
+    <div className="flex gap-8">
+      {/* Step Number Circle */}
+      <div className="flex-shrink-0 w-24 h-24 rounded-full bg-gradient-to-br from-[#008B8B] to-[#20B2AA] flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+        Step {stepNumber}
       </div>
 
-      {/* Action Button */}
-      <div className="flex items-center justify-between">
-        <button 
-          onClick={() => onExpand(index)}
-          className="bg-[#10B981] text-white px-6 py-3 rounded-xl hover:bg-[#20B2AA] transition-colors flex items-center gap-2"
-        >
-          {step.action}
-          <ArrowRight className="w-4 h-4" />
-        </button>
-        {step.cost && (
-          <div className="text-sm">
-            <span className="text-gray-500">From</span>
-            <span className="ml-1 font-semibold text-[#10B981]">{step.cost}</span>
+      {/* Content Card */}
+      <div className="flex-grow bg-gradient-to-br from-white to-[#008B8B]/5 rounded-2xl border border-[#008B8B]/20 p-8 hover:shadow-xl transition-all">
+        {/* Header */}
+        <div className="flex items-center gap-4 mb-6">
+          <div className="p-3 rounded-xl bg-gradient-to-br from-[#008B8B] to-[#20B2AA] text-white shadow-md">
+            {React.createElement(icon, { size: 24 })}
           </div>
-        )}
+          <h3 className="text-2xl font-bold text-gray-800">{title}</h3>
+        </div>
+
+        {/* Description */}
+        <p className="text-gray-600 mb-6">{description}</p>
+
+        {/* Features */}
+        <div className="space-y-4">
+          {features.map((feature, index) => (
+            <div key={index} className="flex items-start gap-3">
+              <div className="bg-gradient-to-r from-[#FF7F50] to-[#FF6347] rounded-full p-1 mt-1">
+                <Check className="w-4 h-4 text-white" />
+              </div>
+              <div>
+                <p className="text-gray-700 font-medium">{feature.title}</p>
+                <p className="text-gray-600 text-sm">{feature.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   </div>
 );
 
-const StepGuide = () => {
-  const [expandedStep, setExpandedStep] = useState(null);
-
+// StepsContent Component
+const StepsContent = () => {
   const steps = [
     {
-      step: 1,
-      title: 'Start with Free App',
+      stepNumber: 1,
+      title: "Begin Your Journey",
+      description: "Start with our Members Dashboard for the complete health monitoring experience.",
       icon: Download,
-      description: "Download iHealth-Sync app from your device's app store",
       features: [
-        'Basic health monitoring dashboard',
-        'Single emergency contact setup',
-        'Standard SOS alerts system',
-        'Basic health tracking features',
-      ],
-      action: 'Download Free',
-      cost: 'Free',
+        {
+          title: "Members Dashboard Access",
+          description: "Subscribe to unlock premium features, real-time monitoring, and personalized insights."
+        },
+        {
+          title: "Free App Option",
+          description: "Try basic services with our Free App to experience essential health monitoring features."
+        },
+        {
+          title: "Premium Benefits",
+          description: "Access advanced AI monitoring, multiple emergency contacts, and priority response."
+        }
+      ]
     },
     {
-      step: 2,
-      title: 'Upgrade to Premium',
+      stepNumber: 2,
+      title: "Customize Your Package",
+      description: "Build your perfect health monitoring solution by selecting products and services.",
       icon: Star,
-      description: 'Unlock full platform capabilities with premium subscription',
       features: [
-        'AI-powered health monitoring and insights',
-        'Up to 5 emergency contacts with priority alerts',
-        'Advanced health analytics and reporting',
-        'Full access to all monitoring devices',
-      ],
-      action: 'Upgrade Now',
-      cost: '€4.99/mo',
+        {
+          title: "Browse & Select",
+          description: "Explore our range of AI-powered devices and professional monitoring services."
+        },
+        {
+          title: "Package Builder",
+          description: "Add devices and services to create your personalized monitoring system."
+        },
+        {
+          title: "Instant Ordering",
+          description: "Complete your order and prepare for seamless integration of all services."
+        }
+      ]
     },
     {
-      step: 3,
-      title: 'Basic Health Monitoring',
-      icon: Shield,
-      description: 'Essential devices for safety and basic health tracking',
+      stepNumber: 3,
+      title: "Activate Your Services",
+      description: "Quick and secure activation process with AI-guided setup assistance.",
+      icon: ShieldCheck,
       features: [
-        'Guardian Button for instant emergency alerts',
-        'Heart Rate Monitor with real-time tracking',
-        'Family Dashboard with live updates',
-        '24/7 basic monitoring service',
-      ],
-      action: 'View Devices',
-      cost: '€9.99/mo',
+        {
+          title: "Email Confirmation",
+          description: "Receive instant access links and setup instructions via email."
+        },
+        {
+          title: "AI Guardian Setup",
+          description: "Let our AI Guardian walk you through profile creation and preference settings."
+        },
+        {
+          title: "Dashboard Configuration",
+          description: "Complete your profile and customize your monitoring preferences."
+        }
+      ]
     },
     {
-      step: 4,
-      title: 'Advanced Health Tracking',
-      icon: Activity,
-      description: 'Comprehensive health monitoring system',
+      stepNumber: 4,
+      title: "Connect & Begin",
+      description: "Start enjoying the full benefits of your personalized iHealth-Sync system.",
+      icon: Smartphone,
       features: [
-        'Smart Scale with body composition analysis',
-        'Temperature monitoring with alerts',
-        'Advanced sleep quality tracking',
-        'Detailed health analytics dashboard',
+        {
+          title: "Device Integration",
+          description: "Connect your health monitoring devices with easy pairing instructions."
+        },
+        {
+          title: "Service Activation",
+          description: "Activate all your selected services and monitoring features."
+        },
+        {
+          title: "24/7 Support",
+          description: "Access continuous support and enjoy peace of mind with real-time monitoring."
+        }
       ],
-      action: 'Explore Devices',
-      cost: '€14.99/mo',
-    },
-    {
-      step: 5,
-      title: 'Professional Care',
-      icon: Pill,
-      description: 'Expert monitoring services for specialized care',
-      features: [
-        'Smart Medication Management System',
-        'Professional health oversight',
-        'Monthly health data analysis',
-        'Priority support team access',
-      ],
-      action: 'Add Services',
-      cost: '€19.99/mo',
-    },
-    {
-      step: 6,
-      title: 'Premium Healthcare',
-      icon: Stethoscope,
-      description: 'Complete professional healthcare support',
-      features: [
-        '24/7 emergency response system',
-        'Professional medical monitoring',
-        'On-demand nursing support',
-        'Unlimited virtual consultations',
-      ],
-      action: 'Explore Care',
-      cost: '€29.99/mo',
-    },
+      isLast: true
+    }
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <Header />
-
-      {/* Add padding to avoid header overlap */}
-      <div className="pt-20">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-br from-[#008B8B] to-[#20B2AA] py-20">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="text-center text-white">
-              <h1 className="text-4xl font-bold mb-4">Build Your Health Monitoring System</h1>
-              <p className="text-xl opacity-90 max-w-2xl mx-auto">
-                Follow our simple step-by-step guide to create your personalized healthcare solution
-              </p>
-            </div>
+    <section className="py-20 bg-gray-50">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 bg-[#008B8B]/10 text-[#008B8B] px-4 py-2 rounded-full mb-4">
+            <span className="w-2 h-2 rounded-full bg-[#FF7F50]"></span>
+            <span className="text-sm font-medium">Getting Started</span>
+            <span className="w-2 h-2 rounded-full bg-[#FF7F50]"></span>
           </div>
-        </section>
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">Your Journey to Better Health</h2>
+          <p className="text-xl text-gray-600">Follow these steps to begin your personalized health monitoring experience</p>
+        </div>
 
-        {/* Main Content */}
-        <section className="py-20">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {steps.map((step, index) => (
-                <StepCard 
-                  key={index} 
-                  step={step} 
-                  index={index}
-                  isExpanded={expandedStep === index}
-                  onExpand={setExpandedStep}
-                />
-              ))}
-            </div>
-
-            {/* Important Notes */}
-            <div className="mt-12 bg-white rounded-xl p-6 border border-gray-200">
-              <div className="flex items-center gap-2 mb-4">
-                <Info className="w-5 h-5 text-[#008B8B]" />
-                <h3 className="font-bold text-gray-900">Important Information</h3>
-              </div>
-              <ul className="grid md:grid-cols-2 gap-4">
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-[#008B8B]" />
-                  <span className="text-gray-600">Premium subscription required for all devices</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-[#008B8B]" />
-                  <span className="text-gray-600">Professional services available independently</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-[#008B8B]" />
-                  <span className="text-gray-600">All devices include setup support</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-[#008B8B]" />
-                  <span className="text-gray-600">Monthly billing - cancel anytime</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </section>
+        <div className="space-y-12">
+          {steps.map((step, index) => (
+            <StepBox key={index} {...step} />
+          ))}
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 
-export default StepGuide;
+// Choice Section Component
+const ChoiceSection = () => (
+  <section className="bg-gradient-to-br from-[#008B8B] via-[#009999] to-[#20B2AA] py-20">
+    <div className="max-w-7xl mx-auto px-6">
+      {/* Section Header */}
+      <div className="text-center mb-16">
+        <h2 className="text-4xl font-bold text-white mb-4">Choose Your Path</h2>
+        <p className="text-xl text-white/90">Select the option that best fits your needs</p>
+      </div>
+
+      {/* Options Container */}
+      <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        {/* Free App Option */}
+        <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 hover:bg-white/15 transition-all">
+          <div className="flex flex-col items-center text-center">
+            <Download className="w-16 h-16 text-white mb-6" />
+            <h3 className="text-2xl font-bold text-white mb-4">Download Free App</h3>
+            <p className="text-white/90 mb-6">
+              Experience basic health monitoring features and see how iHealth-Sync can help you.
+            </p>
+            <ul className="text-white/90 mb-8 text-left space-y-3">
+              <li className="flex items-center gap-2">
+                <Check className="w-5 h-5 text-[#FF7F50]" />
+                <span>Basic health monitoring</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <Check className="w-5 h-5 text-[#FF7F50]" />
+                <span>Single emergency contact</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <Check className="w-5 h-5 text-[#FF7F50]" />
+                <span>Standard alerts</span>
+              </li>
+            </ul>
+            <button className="bg-white text-[#008B8B] px-8 py-3 rounded-full font-medium hover:bg-[#FF7F50] hover:text-white transition-all">
+              Download Now
+            </button>
+          </div>
+        </div>
+
+        {/* Premium Option */}
+        <div className="bg-white rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all transform hover:scale-[1.02]">
+          <div className="flex flex-col items-center text-center">
+            <Star className="w-16 h-16 text-[#FF7F50] mb-6" />
+            <h3 className="text-2xl font-bold text-gray-800 mb-4">Join Us Today</h3>
+            <p className="text-gray-600 mb-6">
+              Get full access to our comprehensive health monitoring platform.
+            </p>
+            <ul className="text-gray-600 mb-8 text-left space-y-3">
+              <li className="flex items-center gap-2">
+                <Check className="w-5 h-5 text-[#008B8B]" />
+                <span>AI-powered health monitoring</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <Check className="w-5 h-5 text-[#008B8B]" />
+                <span>Multiple emergency contacts</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <Check className="w-5 h-5 text-[#008B8B]" />
+                <span>Premium services & devices</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <Check className="w-5 h-5 text-[#008B8B]" />
+                <span>24/7 professional monitoring</span>
+              </li>
+            </ul>
+            <button className="bg-gradient-to-r from-[#008B8B] to-[#20B2AA] text-white px-8 py-3 rounded-full font-medium hover:opacity-90 transition-opacity flex items-center gap-2">
+              Get Started
+              <ArrowRight size={18} />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+// Hero Section Component
+const HeroSection = () => (
+  <section className="relative bg-gradient-to-br from-[#008B8B] via-[#009999] to-[#20B2AA] py-24 text-center text-white overflow-hidden">
+    <div className="absolute inset-0">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,_rgba(255,255,255,0.15)_1px,_transparent_0)] bg-[size:40px_40px]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-transparent" />
+    </div>
+
+    <div className="relative z-10 max-w-4xl mx-auto px-6">
+      <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
+        <Star size={16} className="text-[#FF7F50]" />
+        <span className="text-sm font-medium">Simple 4-step process</span>
+      </div>
+
+      <h1 className="text-5xl font-extrabold mb-6 leading-tight">
+        Start Your Health Journey<br />
+        <span className="text-[#FF7F50]">in Minutes</span>
+      </h1>
+
+      <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed">
+        Follow our simple guide to begin your personalized health monitoring experience. No complicated setup, just four easy steps.
+      </p>
+
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <button className="group flex items-center gap-2 bg-white text-[#008B8B] px-6 py-3 rounded-full font-medium hover:bg-[#FF7F50] hover:text-white transition-all duration-300">
+          Start Now
+          <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+        </button>
+        <button className="flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white px-6 py-3 rounded-full font-medium hover:bg-white/20 transition-all duration-300">
+          Watch Demo
+        </button>
+      </div>
+    </div>
+  </section>
+);
+
+// Page Component
+const Page = () => (
+  <div>
+    <Header /> {/* Imported Header component */}
+    <main className="relative pt-16">
+      <HeroSection />
+      <StepsContent />
+      <ChoiceSection />
+    </main>
+  </div>
+);
+
+export default Page;

@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Header from '../components/Header'; // Import the Header component
 import {
   Check,
   Download,
@@ -16,8 +17,6 @@ import {
   Activity,
   Phone,
   Stethoscope,
-  ChevronRight,
-  Tablet,
 } from 'lucide-react';
 
 // Feature Component
@@ -343,6 +342,9 @@ const ShopPage = () => {
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-100">
+      {/* Header Section */}
+      <Header />
+
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-[#008B8B] via-[#009999] to-[#20B2AA] pt-24 pb-32">
         <div className="absolute inset-0">
@@ -574,7 +576,8 @@ const ShopPage = () => {
 // Main Page Component
 const Page = () => {
   return (
-    <main className="relative">
+    <main className="relative pt-20"> {/* Added pt-20 to move content down */}
+      <Header />
       <ShopPage />
     </main>
   );

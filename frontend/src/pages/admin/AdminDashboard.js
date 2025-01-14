@@ -1,500 +1,258 @@
-import React, { useState, useEffect } from "react";
-import Sidebar from "./Sidebar"; // Correct import path
+'use client';
+
+import React, { useEffect, useState } from 'react';
 import { 
-  Bell, 
-  BarChart3,
-  Users, 
-  Settings, 
-  AlertCircle, 
-  FileText
+  Users, Shield, AlertCircle, Activity, BarChart2,
+  HelpCircle, FileText, Settings, Star, Search,
+  Download, Upload, Edit, Trash2, Cloud, Sun, CloudRain, CloudSnow
 } from 'lucide-react';
+import AdminHeader from '../../components/admin/AdminHeader';
 
-const AdminDashboard = () => {
-  const [clients, setClients] = useState([]);
-  const [subscriptions, setSubscriptions] = useState([]);
-  const [services, setServices] = useState([]);
-  const [emergencySOS, setEmergencySOS] = useState([]);
-  const [medDispensers, setMedDispensers] = useState([]);
-  const [vitalMonitoring, setVitalMonitoring] = useState([]);
-  const [sosAlerts, setSosAlerts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+// Metric Card Component
+const MetricCard = ({ icon: Icon, title, value, subValue, gradient }) => (
+  <div className="bg-white rounded-xl border border-gray-200 hover:shadow-lg transition-all duration-300 relative overflow-hidden">
+    {/* Background Gradient */}
+    <div className={`absolute inset-0 opacity-5 ${gradient}`} />
+    
+    <div className="p-6 relative">
+      <div className="flex items-center gap-4">
+        <div className={`p-3 rounded-lg ${gradient} text-white`}>
+          <Icon size={24} />
+        </div>
+        <div>
+          <h3 className="text-gray-500 text-sm font-medium mb-1">{title}</h3>
+          <div className="flex items-baseline gap-2">
+            <span className="text-2xl font-bold text-gray-900">{value}</span>
+            {subValue && (
+              <span className="text-sm text-gray-500">{subValue}</span>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
 
-  // Fetch data
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = () => {
-    // Simulated data fetching
-    setTimeout(() => {
-      setClients([
-        { id: 1, name: "John Doe", subscription: "Premium", serviceUsage: "SOS Guardian" },
-        { id: 2, name: "Jane Smith", subscription: "Basic", serviceUsage: "Glucose Monitoring" }
-      ]);
-      setSubscriptions([
-        { plan: "Premium", active: 120, cancelled: 15 },
-        { plan: "Basic", active: 200, cancelled: 30 }
-      ]);
-      setServices([
-        { serviceName: "SOS Guardian", active: 100, inactive: 10 },
-        { serviceName: "Glucose Monitoring", active: 150, inactive: 20 }
-      ]);
-      setEmergencySOS([
-        { client: "John Doe", urgency: "High", responseTime: "5 mins", status: "Resolved" }
-      ]);
-      setMedDispensers([
-        {
-          id: "MD001",
-          user: "John Doe",
-          status: "Active",
-          lastSync: "2 mins ago",
-          battery: "85%"
-        }
-      ]);
-      setVitalMonitoring([
-        {
-          user: "Jane Smith",
-          deviceType: "Heart Monitor",
-          lastReading: "72 bpm",
-          battery: "90%",
-          status: "Normal"
-        }
-      ]);
-      setSosAlerts([
-        {
-          user: "John Doe",
-          time: "10:30 AM",
-          location: "Home",
-          status: "Resolved",
-          responseTime: "2 mins"
-        }
-      ]);
-      setIsLoading(false);
-    }, 1000);
-  };
+// Top Metrics Component
+const TopMetrics = () => {
+  const metrics = [
+    {
+      icon: Users,
+      title: "Active Clients",
+      value: "320",
+      subValue: "+12% this month",
+      gradient: "bg-gradient-to-r from-[#008B8B] to-[#20B2AA]"
+    },
+    {
+      icon: Star,
+      title: "Premium Subscriptions",
+      value: "156",
+      subValue: "€1,549 MRR",
+      gradient: "bg-gradient-to-r from-[#FF7F50] to-[#FF6347]"
+    },
+    {
+      icon: Shield,
+      title: "Active Devices",
+      value: "485",
+      subValue: "98% online",
+      gradient: "bg-gradient-to-r from-[#008B8B] to-[#20B2AA]"
+    },
+    {
+      icon: AlertCircle,
+      title: "Active SOS Alerts",
+      value: "2",
+      subValue: "Avg. 3min response",
+      gradient: "bg-gradient-to-r from-[#FF7F50] to-[#FF6347]"
+    }
+  ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Top Navigation */}
-      <nav className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex">
-              <div className="flex-shrink-0 flex items-center">
-                <img className="h-8 w-auto" src="/logo.svg" alt="iHealth-Sync" />
-              </div>
-            </div>
-          </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {metrics.map((metric, index) => (
+        <MetricCard key={index} {...metric} />
+      ))}
+    </div>
+  );
+};
+
+// Quick Stats Component
+const QuickStats = () => (
+  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+    {/* Subscription Distribution */}
+    <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <h3 className="text-lg font-semibold text-gray-800 mb-4">Subscription Distribution</h3>
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <span className="text-gray-600">Members Dashboard</span>
+          <span className="text-[#008B8B] font-semibold">142 users</span>
         </div>
-      </nav>
-
-      <div className="flex">
-        {/* Sidebar */}
-        <div className="w-64 h-screen bg-white shadow-lg">
-          <div className="flex flex-col h-full">
-            <nav className="mt-5 flex-1 px-2 space-y-1">
-              <a href="#" className="bg-teal-50 text-teal-700 hover:bg-teal-100 group flex items-center px-2 py-2 text-sm font-medium rounded-md">
-                <BarChart3 className="mr-3 h-6 w-6" />
-                Dashboard
-              </a>
-              <a href="#" className="text-gray-600 hover:bg-gray-50 group flex items-center px-2 py-2 text-sm font-medium rounded-md">
-                <Users className="mr-3 h-6 w-6" />
-                Manage Clients
-              </a>
-              {/* Add other sidebar items */}
-            </nav>
-          </div>
+        <div className="flex items-center justify-between">
+          <span className="text-gray-600">Family Dashboard</span>
+          <span className="text-[#008B8B] font-semibold">86 users</span>
         </div>
+        <div className="flex items-center justify-between">
+          <span className="text-gray-600">Free Users</span>
+          <span className="text-[#008B8B] font-semibold">92 users</span>
+        </div>
+      </div>
+    </div>
 
-        {/* Main Content */}
-        <main className="flex-1 p-8">
-          {isLoading ? (
-            <div className="flex items-center justify-center h-screen">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-700"></div>
-            </div>
-          ) : (
-            <div className="space-y-6">
-              {/* Header */}
-              <div className="md:flex md:items-center md:justify-between">
-                <div className="flex-1 min-w-0">
-                  <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
-                    Admin Dashboard
-                  </h2>
-                </div>
-              </div>
+    {/* Active Devices */}
+    <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <h3 className="text-lg font-semibold text-gray-800 mb-4">Active Devices</h3>
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <span className="text-gray-600">Guardian Buttons</span>
+          <span className="text-[#FF7F50] font-semibold">124 devices</span>
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="text-gray-600">Heart Rate Monitors</span>
+          <span className="text-[#FF7F50] font-semibold">98 devices</span>
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="text-gray-600">Dashboard Tablets</span>
+          <span className="text-[#FF7F50] font-semibold">76 devices</span>
+        </div>
+      </div>
+    </div>
 
-              {/* Metrics Grid */}
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                {/* Active Clients */}
-                <div className="bg-white overflow-hidden shadow rounded-lg">
-                  <div className="p-5">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0">
-                        <Users className="h-6 w-6 text-gray-400" />
-                      </div>
-                      <div className="ml-5 w-0 flex-1">
-                        <dl>
-                          <dt className="text-sm font-medium text-gray-500 truncate">
-                            Active Clients
-                          </dt>
-                          <dd className="flex items-baseline">
-                            <div className="text-2xl font-semibold text-gray-900">
-                              {clients.length}
-                            </div>
-                          </dd>
-                        </dl>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+    {/* Professional Services */}
+    <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <h3 className="text-lg font-semibold text-gray-800 mb-4">Professional Services</h3>
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <span className="text-gray-600">SOS Call Centre</span>
+          <span className="text-[#008B8B] font-semibold">45 active</span>
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="text-gray-600">Med Dispenser</span>
+          <span className="text-[#008B8B] font-semibold">32 active</span>
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="text-gray-600">Nurse Services</span>
+          <span className="text-[#008B8B] font-semibold">28 active</span>
+        </div>
+      </div>
+    </div>
+  </div>
+);
 
-                {/* Active Subscriptions */}
-                <div className="bg-white overflow-hidden shadow rounded-lg">
-                  <div className="p-5">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0">
-                        <Settings className="h-6 w-6 text-gray-400" />
-                      </div>
-                      <div className="ml-5 w-0 flex-1">
-                        <dl>
-                          <dt className="text-sm font-medium text-gray-500 truncate">
-                            Active Subscriptions
-                          </dt>
-                          <dd className="flex items-baseline">
-                            <div className="text-2xl font-semibold text-gray-900">
-                              {subscriptions.reduce((sum, plan) => sum + plan.active, 0)}
-                            </div>
-                          </dd>
-                        </dl>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+// Weather Icon Mapping
+const getWeatherIcon = (weather) => {
+  switch (weather) {
+    case 'Clear':
+      return <Sun size={24} />;
+    case 'Rain':
+      return <CloudRain size={24} />;
+    case 'Snow':
+      return <CloudSnow size={24} />;
+    default:
+      return <Cloud size={24} />;
+  }
+};
 
-                {/* Emergency SOS */}
-                <div className="bg-white overflow-hidden shadow rounded-lg">
-                  <div className="p-5">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0">
-                        <AlertCircle className="h-6 w-6 text-red-400" />
-                      </div>
-                      <div className="ml-5 w-0 flex-1">
-                        <dl>
-                          <dt className="text-sm font-medium text-gray-500 truncate">
-                            Active SOS Requests
-                          </dt>
-                          <dd className="flex items-baseline">
-                            <div className="text-2xl font-semibold text-gray-900">
-                              {emergencySOS.length}
-                            </div>
-                          </dd>
-                        </dl>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+// Welcome Section for Martijn with Time, Date, and Weather
+const WelcomeSection = () => {
+  const [time, setTime] = useState(new Date().toLocaleTimeString());
+  const [date, setDate] = useState(new Date().toLocaleDateString());
+  const [weather, setWeather] = useState({ temp: null, condition: null });
 
-              {/* Tables Section */}
-              <div className="space-y-6">
-                {/* Client Management */}
-                <div className="bg-white shadow rounded-lg">
-                  <div className="px-4 py-5 sm:px-6">
-                    <h3 className="text-lg leading-6 font-medium text-gray-900">
-                      Client Management
-                    </h3>
-                  </div>
-                  <div className="flex flex-col">
-                    <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                      <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                        <div className="overflow-hidden">
-                          <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gray-50">
-                              <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                  Name
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                  Subscription
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                  Service Usage
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                  Actions
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody className="bg-white divide-y divide-gray-200">
-                              {clients.map((client) => (
-                                <tr key={client.id}>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    {client.name}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {client.subscription}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {client.serviceUsage}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    <button className="text-teal-600 hover:text-teal-900">Edit</button>
-                                    <button className="ml-4 text-red-600 hover:text-red-900">Delete</button>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+  // Fetch Weather Data
+  useEffect(() => {
+    const fetchWeather = async () => {
+      try {
+        const apiKey = 'YOUR_OPENWEATHERMAP_API_KEY'; // Replace with your API key
+        const city = 'Amsterdam'; // Replace with your city
+        const response = await fetch(
+          `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`
+        );
 
-                {/* Service Management */}
-                <div className="bg-white shadow rounded-lg">
-                  <div className="px-4 py-5 sm:px-6">
-                    <h3 className="text-lg leading-6 font-medium text-gray-900">
-                      Service Management
-                    </h3>
-                  </div>
-                  <div className="flex flex-col">
-                    <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                      <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                        <div className="overflow-hidden">
-                          <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gray-50">
-                              <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                  Service Name
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                  Active
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                  Inactive
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                  Actions
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody className="bg-white divide-y divide-gray-200">
-                              {services.map((service) => (
-                                <tr key={service.serviceName}>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    {service.serviceName}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {service.active}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {service.inactive}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    <button className="text-teal-600 hover:text-teal-900">Edit</button>
-                                    <button className="ml-4 text-red-600 hover:text-red-900">Delete</button>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+        if (!response.ok) {
+          throw new Error('Failed to fetch weather data');
+        }
 
-                {/* Med Dispenser Management */}
-                <div className="bg-white shadow rounded-lg">
-                  <div className="px-4 py-5 sm:px-6">
-                    <h3 className="text-lg font-medium text-gray-900">Med Dispenser Management</h3>
-                  </div>
-                  <div className="flex flex-col">
-                    <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                      <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                        <div className="overflow-hidden">
-                          <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gray-50">
-                              <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                  Device ID
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                  User
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                  Status
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                  Last Sync
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                  Battery
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                  Actions
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody className="bg-white divide-y divide-gray-200">
-                              {medDispensers.map((device) => (
-                                <tr key={device.id}>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    {device.id}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {device.user}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                      {device.status}
-                                    </span>
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {device.lastSync}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {device.battery}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    <button className="text-teal-600 hover:text-teal-900">Configure</button>
-                                    <button className="ml-4 text-red-600 hover:text-red-900">Reset</button>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+        const data = await response.json();
 
-                {/* Vital Monitoring */}
-                <div className="bg-white shadow rounded-lg">
-                  <div className="px-4 py-5 sm:px-6">
-                    <h3 className="text-lg font-medium text-gray-900">Vital Monitoring Status</h3>
-                  </div>
-                  <div className="flex flex-col">
-                    <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                      <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                        <div className="overflow-hidden">
-                          <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gray-50">
-                              <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                  User
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                  Device Type
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                  Last Reading
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                  Battery
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                  Status
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody className="bg-white divide-y divide-gray-200">
-                              {vitalMonitoring.map((device, idx) => (
-                                <tr key={idx}>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    {device.user}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {device.deviceType}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {device.lastReading}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {device.battery}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                      {device.status}
-                                    </span>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+        if (data.main && data.weather) {
+          setWeather({
+            temp: data.main.temp,
+            condition: data.weather[0].main,
+          });
+        } else {
+          throw new Error('Invalid weather data format');
+        }
+      } catch (error) {
+        console.error('Error fetching weather data:', error);
+        setWeather({ temp: null, condition: null });
+      }
+    };
 
-                {/* SOS Alert Management */}
-                <div className="bg-white shadow rounded-lg">
-                  <div className="px-4 py-5 sm:px-6">
-                    <h3 className="text-lg font-medium text-gray-900">SOS Alerts</h3>
-                  </div>
-                  <div className="flex flex-col">
-                    <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                      <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                        <div className="overflow-hidden">
-                          <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gray-50">
-                              <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                  User
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                  Time
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                  Location
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                  Status
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                  Response Time
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody className="bg-white divide-y divide-gray-200">
-                              {sosAlerts.map((alert, idx) => (
-                                <tr key={idx}>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    {alert.user}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {alert.time}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {alert.location}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                      {alert.status}
-                                    </span>
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {alert.responseTime}
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+    fetchWeather();
+  }, []);
+
+  // Update Time Every Second
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTime(new Date().toLocaleTimeString());
+      setDate(new Date().toLocaleDateString());
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="relative bg-gradient-to-r from-[#008B8B] to-[#20B2AA] rounded-xl p-8 text-white mb-8 overflow-hidden">
+      {/* Animated Gradient Background */}
+      <div className="absolute inset-0 bg-[length:200%_200%] bg-gradient-to-r from-[#008B8B] via-[#20B2AA] to-[#008B8B] animate-gradient"></div>
+
+      {/* Content */}
+      <div className="relative z-10">
+        <h1 className="text-4xl font-bold animate-fade-in">Welcome back, Martijn!</h1>
+        <p className="mt-2 text-lg animate-fade-in delay-100">Here's an overview of your dashboard and key metrics.</p>
+
+        {/* Time, Date, and Weather */}
+        <div className="mt-6 flex items-center gap-6">
+          <div className="flex items-center gap-2">
+            <span className="text-2xl font-bold">{time}</span>
+            <span className="text-lg">{date}</span>
+          </div>
+          {weather.temp !== null && (
+            <div className="flex items-center gap-2">
+              {getWeatherIcon(weather.condition)}
+              <span className="text-2xl font-bold">{Math.round(weather.temp)}°C</span>
+              <span className="text-lg">{weather.condition}</span>
             </div>
           )}
-        </main>
+        </div>
       </div>
     </div>
   );
 };
 
-export default AdminDashboard;
+// Main Layout Component
+const AdminLayout = ({ children }) => {
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Admin Header */}
+      <AdminHeader />
+
+      {/* Main Content Area */}
+      <main className="pt-24 p-8"> {/* Adjusted padding-top to move content down */}
+        <div className="max-w-7xl mx-auto">
+          {/* Welcome Section */}
+          <WelcomeSection />
+
+          {/* Top Metrics */}
+          <TopMetrics />
+
+          {/* Quick Stats */}
+          <QuickStats />
+
+          {/* Additional Content */}
+          {children}
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default AdminLayout;

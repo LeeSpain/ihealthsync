@@ -9,27 +9,32 @@ body {
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f9fafb; /* Light gray background color for the body */
+  background-color: #f9fafb;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
-  background-color: #f3f4f6; /* Slightly darker gray for code blocks */
+  background-color: #f3f4f6;
   padding: 2px 4px;
   border-radius: 4px;
-  color: #374151; /* Updated to darker gray for better readability */
+  color: #374151;
 }
 
 /* Custom Components */
 @layer components {
   /* Primary Button */
   .btn-primary {
-    @apply bg-[#FF7F50] text-white px-6 py-3 rounded-xl hover:bg-[#FF6347] transition-colors flex items-center gap-2;
+    @apply bg-[#A390E4] text-white px-6 py-3 rounded-xl hover:bg-[#9280D8] transition-colors flex items-center gap-2;
   }
 
   /* Secondary Button */
   .btn-secondary {
-    @apply bg-white/10 text-white px-6 py-3 rounded-xl hover:bg-white/20 transition-colors flex items-center gap-2;
+    @apply bg-[#10B981] text-white px-6 py-3 rounded-xl hover:bg-[#0EA472] transition-colors flex items-center gap-2;
+  }
+
+  /* Outline Button */
+  .btn-outline {
+    @apply border border-white/20 text-white px-6 py-3 rounded-xl hover:bg-white/10 transition-colors flex items-center gap-2;
   }
 
   /* Feature Card */
@@ -39,7 +44,17 @@ code {
 
   /* Feature Icon */
   .feature-icon {
-    @apply bg-[#008B8B] rounded-xl p-3 text-white;
+    @apply bg-[#A390E4] rounded-xl p-3 text-white;
+  }
+
+  /* Glass Card */
+  .glass-card {
+    @apply bg-white/10 backdrop-blur-sm rounded-xl border border-white/20;
+  }
+
+  /* Stats Card */
+  .stats-card {
+    @apply bg-white/10 backdrop-blur-sm rounded-lg p-4;
   }
 
   /* Tab Button */
@@ -48,11 +63,24 @@ code {
   }
 
   .tab-button-active {
-    @apply bg-[#008B8B] text-white;
+    @apply bg-[#A390E4] text-white;
   }
 
   .tab-button-inactive {
-    @apply bg-[#008B8B]/10 text-[#008B8B] hover:bg-[#008B8B]/20;
+    @apply bg-[#A390E4]/10 text-[#A390E4] hover:bg-[#A390E4]/20;
+  }
+
+  /* Grid Pattern Background */
+  .grid-pattern {
+    @apply absolute inset-0;
+    background-image: linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px),
+                     linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* Gradient Text */
+  .gradient-text {
+    @apply bg-gradient-to-r from-[#A390E4] to-[#10B981] bg-clip-text text-transparent;
   }
 }
 
@@ -61,11 +89,56 @@ code {
   animation: fadeIn 0.5s ease-in;
 }
 
+.scale-in {
+  animation: scaleIn 0.3s ease-out;
+}
+
+.slide-up {
+  animation: slideUp 0.5s ease-out;
+}
+
+.slide-down {
+  animation: slideDown 0.5s ease-out;
+}
+
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Utility Classes */
+.text-shadow {
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.hover-lift {
+  transition: transform 0.2s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+/* Layout Utilities */
+.section-padding {
+  @apply py-24 px-6;
+}
+
+.container-width {
+  @apply max-w-7xl mx-auto;
 }

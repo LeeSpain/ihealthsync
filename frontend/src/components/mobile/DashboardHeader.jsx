@@ -17,6 +17,12 @@ const DashboardHeader = () => {
         {/* Navigation Links */}
         <nav className="hidden md:flex space-x-6">
           <Link
+            to="/mobile-dashboard/calendar"
+            className="hover:text-gray-300 transition"
+          >
+            Smart Calendar
+          </Link>
+          <Link
             to="/mobile-dashboard/clients"
             className="hover:text-gray-300 transition"
           >

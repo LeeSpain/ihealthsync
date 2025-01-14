@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import {
   Bell,
   ChevronRight,
@@ -22,8 +23,11 @@ import {
   Zap,
   AlertCircle,
   Activity,
+  Layout,
+  Sparkles,
+  Star,
 } from 'lucide-react';
-import Header from '../components/Header'; // Updated import to use Header.js
+import Header from '../components/Header';
 
 const HomePage = () => {
   // State Management
@@ -38,50 +42,7 @@ const HomePage = () => {
     stress: { value: 42, status: 'normal' },
   });
 
-  // Steps Configuration
-  const steps = [
-    {
-      id: 1,
-      title: 'Create Your Profile',
-      icon: UserPlus,
-      description: 'Start your health journey with a personalized profile',
-      substeps: [
-        'Complete health assessment',
-        'Set personal health goals',
-        'Connect your devices',
-      ],
-      stats: '2 min setup',
-      color: 'bg-gradient-to-r from-[#008B8B] to-[#20B2AA]',
-    },
-    {
-      id: 2,
-      title: 'Personalize Your Experience',
-      icon: Settings,
-      description: 'Customize your monitoring dashboard',
-      substeps: [
-        'Choose vital signs to track',
-        'Set alert preferences',
-        'Add emergency contacts',
-      ],
-      stats: '5 min setup',
-      color: 'bg-gradient-to-r from-[#008B8B] to-[#20B2AA]',
-    },
-    {
-      id: 3,
-      title: 'Start Monitoring',
-      icon: Heart,
-      description: 'Begin your 24/7 health monitoring journey',
-      substeps: [
-        'View real-time health data',
-        'Receive AI-powered insights',
-        'Share with healthcare providers',
-      ],
-      stats: 'Instant activation',
-      color: 'bg-gradient-to-r from-[#008B8B] to-[#20B2AA]',
-    },
-  ];
-
-  // Status Indicator Component
+  // Reusable Components
   const StatusIndicator = ({ status, value }) => {
     const getStatusStyles = (status) => {
       const styles = {
@@ -100,12 +61,255 @@ const HomePage = () => {
     );
   };
 
+  const FeatureCard = ({ icon: Icon, title, description }) => (
+    <div className="bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 p-6 rounded-xl border border-[#20B2AA]/20 hover:shadow-lg transition-all">
+      <div className="flex items-start gap-4">
+        <div className="bg-gradient-to-r from-[#008B8B] to-[#20B2AA] p-3 rounded-lg text-white">
+          <Icon className="w-6 h-6" />
+        </div>
+        <div>
+          <h3 className="text-xl font-semibold mb-2">{title}</h3>
+          <p className="text-gray-600">{description}</p>
+        </div>
+      </div>
+    </div>
+  );
+
+  const DashboardSection = () => (
+    <section className="py-16 bg-white">
+      <div className="max-w-7xl mx-auto px-6">
+        <h2 className="text-4xl font-bold text-center mb-4">Why the iHealth-Sync Dashboard Matters</h2>
+        <p className="text-xl text-gray-600 text-center mb-12">
+          Your personalized health dashboard is the heart of your monitoring experience.
+        </p>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          {/* Left Column - Explanation */}
+          <div>
+            <h3 className="text-2xl font-semibold text-[#008B8B] mb-4">Centralized Health Monitoring</h3>
+            <p className="text-gray-600 mb-4">
+              The iHealth-Sync Dashboard gives you a single, real-time view of all your vital health data. From heart rate and blood pressure to sleep patterns and activity levels, everything is tracked in one intuitive interface. It's designed to simplify your health journey and give you control over your well-being at a glance.
+            </p>
+            <p className="text-gray-600 mb-8">
+              With personalized recommendations, historical trend analysis, and seamless integration of AI-powered insights, you can stay ahead of your health and wellness goals.
+            </p>
+            <h4 className="text-xl font-semibold text-[#008B8B] mb-4">Why is it important?</h4>
+            <ul className="list-disc list-inside text-gray-600 mb-6">
+              <li>Monitor your health in real time</li>
+              <li>Track patterns and trends over time</li>
+              <li>Get tailored insights and health recommendations</li>
+              <li>Stay connected with your healthcare providers and family</li>
+            </ul>
+          </div>
+
+          {/* Right Column - Example Image */}
+          <div className="relative bg-gradient-to-br from-[#008B8B]/10 to-[#20B2AA]/20 p-8 rounded-2xl border border-[#20B2AA]/20 h-[400px]">
+            <div className="w-full h-full rounded-lg overflow-hidden">
+              <img
+                src="/iHealth-home7.jpg"
+                alt="iHealth-Sync Dashboard"
+                className="w-full h-full object-cover rounded-lg shadow-lg"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Call to Action */}
+        <div className="text-center mt-12">
+          <button className="bg-[#FF7F50] text-white py-3 px-6 rounded-full hover:bg-[#FF6347] transition duration-300">
+            Explore Your Dashboard
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+
+  const TestimonialsSection = () => (
+    <section className="py-16 bg-white">
+      <div className="max-w-7xl mx-auto px-6">
+        <h2 className="text-4xl font-bold text-center mb-4">What Our Users Say</h2>
+        <p className="text-xl text-gray-600 text-center mb-12">
+          Hear from people who transformed their health with iHealth-Sync.
+        </p>
+
+        {/* Testimonials Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Testimonial 1 */}
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            className="bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 p-6 rounded-2xl border border-[#20B2AA]/20 hover:shadow-lg transition-all relative"
+          >
+            {/* User Avatar */}
+            <div className="absolute -top-6 left-6 w-12 h-12 rounded-full bg-gradient-to-r from-[#008B8B] to-[#20B2AA] flex items-center justify-center text-white font-bold text-lg">
+              JD
+            </div>
+            <div className="mt-8">
+              <h3 className="text-lg font-semibold">John Doe</h3>
+              <p className="text-sm text-gray-600 mb-4">New York, USA</p>
+              <p className="text-gray-700 mb-4">
+                "iHealth-Sync has been a game-changer for my health. The real-time monitoring and AI insights helped me improve my sleep and reduce stress significantly."
+              </p>
+              {/* Star Rating */}
+              <div className="flex items-center gap-2 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                ))}
+                <span className="text-sm text-gray-600">5/5</span>
+              </div>
+              {/* Key Metrics */}
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <Heart className="w-4 h-4 text-red-500" />
+                <span>Improved sleep by 2 hours per night</span>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Testimonial 2 */}
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            className="bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 p-6 rounded-2xl border border-[#20B2AA]/20 hover:shadow-lg transition-all relative"
+          >
+            {/* User Avatar */}
+            <div className="absolute -top-6 left-6 w-12 h-12 rounded-full bg-gradient-to-r from-[#008B8B] to-[#20B2AA] flex items-center justify-center text-white font-bold text-lg">
+              JS
+            </div>
+            <div className="mt-8">
+              <h3 className="text-lg font-semibold">Jane Smith</h3>
+              <p className="text-sm text-gray-600 mb-4">London, UK</p>
+              <p className="text-gray-700 mb-4">
+                "The family connection feature is amazing! I can now share my health updates with my doctor and family in real-time. Highly recommend iHealth-Sync!"
+              </p>
+              {/* Star Rating */}
+              <div className="flex items-center gap-2 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                ))}
+                <span className="text-sm text-gray-600">5/5</span>
+              </div>
+              {/* Key Metrics */}
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <UserPlus className="w-4 h-4 text-blue-500" />
+                <span>Connected with 3 family members</span>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Testimonial 3 */}
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            className="bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 p-6 rounded-2xl border border-[#20B2AA]/20 hover:shadow-lg transition-all relative"
+          >
+            {/* User Avatar */}
+            <div className="absolute -top-6 left-6 w-12 h-12 rounded-full bg-gradient-to-r from-[#008B8B] to-[#20B2AA] flex items-center justify-center text-white font-bold text-lg">
+              ML
+            </div>
+            <div className="mt-8">
+              <h3 className="text-lg font-semibold">Michael Lee</h3>
+              <p className="text-sm text-gray-600 mb-4">Sydney, Australia</p>
+              <p className="text-gray-700 mb-4">
+                "The AI-powered insights are incredibly accurate. I was able to identify and address my stress triggers early, thanks to iHealth-Sync."
+              </p>
+              {/* Star Rating */}
+              <div className="flex items-center gap-2 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                ))}
+                <span className="text-sm text-gray-600">5/5</span>
+              </div>
+              {/* Key Metrics */}
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <Activity className="w-4 h-4 text-green-500" />
+                <span>Reduced stress by 30% in 3 months</span>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Call-to-Action */}
+        <div className="text-center mt-12">
+          <Link
+            to="/testimonials"
+            className="bg-[#FF7F50] text-white px-8 py-3 rounded-full hover:bg-[#FF6347] transition-all inline-flex items-center gap-2"
+          >
+            Read More Stories <ArrowRight className="w-5 h-5" />
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+
+  const InsightsAndResourcesSection = () => {
+    const insights = [
+      {
+        icon: Settings,
+        title: "AI and Health Monitoring",
+        description: "Learn how artificial intelligence transforms personal health monitoring into a proactive tool for better outcomes.",
+        link: "/ai-health-monitoring",
+      },
+      {
+        icon: Bell,
+        title: "Managing Medications",
+        description: "Simplify your medication routines with smart reminders, tracking, and professional guidance.",
+        link: "/managing-medications",
+      },
+      {
+        icon: UserPlus,
+        title: "Central Access",
+        description: "Ensure everyone in your care network has secure access to your health history and updates in real-time.",
+        link: "/central-access",
+      },
+    ];
+
+    return (
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-6">
+          <h2 className="text-4xl font-bold text-center mb-4">Insights and Resources</h2>
+          <p className="text-xl text-gray-600 text-center mb-12">
+            Discover how iHealth-Sync empowers you and your care network to stay connected and informed.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {insights.map((insight, index) => (
+              <div
+                key={index}
+                className="group hover:scale-105 transition-all duration-300 bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 rounded-2xl overflow-hidden border border-[#20B2AA]/20"
+              >
+                <div className="h-48 bg-[#008B8B]/20 rounded-t-2xl flex items-center justify-center">
+                  <insight.icon className="w-16 h-16 text-[#008B8B]" />
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-semibold mb-3">{insight.title}</h3>
+                  <p className="text-gray-600 mb-4">{insight.description}</p>
+                  <Link
+                    to={insight.link}
+                    className="text-[#008B8B] font-medium flex items-center gap-2 group-hover:gap-3 transition-all"
+                  >
+                    Learn More <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <Link
+              to="/resources"
+              className="bg-[#FF7F50] text-white px-8 py-3 rounded-full hover:bg-[#FF6347] transition-all"
+            >
+              View All Insights
+            </Link>
+          </div>
+        </div>
+      </section>
+    );
+  };
+
   return (
     <div className="min-h-screen">
       {/* Header */}
       <Header />
 
-      {/* Main Content with padding to avoid overlap */}
+      {/* Main Content */}
       <div className="pt-20">
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-[#008B8B] via-[#009999] to-[#20B2AA] relative">
@@ -190,118 +394,35 @@ const HomePage = () => {
                   </div>
 
                   {/* Secondary Metrics */}
-                  <div className="bg-gray-50 rounded-xl p-3 hover:bg-gray-100/50 transition-all border border-gray-200">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Droplet className="w-4 h-4 text-cyan-600" />
-                      <span className="text-gray-700 text-xs font-medium">Oxygen</span>
+                  {[
+                    { icon: Droplet, label: 'Oxygen', value: stats.oxygen.value, unit: '%', color: 'text-cyan-600' },
+                    { icon: Moon, label: 'Sleep', value: stats.sleep.value, unit: 'hrs', color: 'text-indigo-600' },
+                    { icon: Circle, label: 'Steps', value: stats.steps.value.toLocaleString(), color: 'text-blue-600' },
+                    { icon: Thermometer, label: 'Temp', value: stats.temp.value, unit: '°', color: 'text-orange-600' },
+                    { icon: Zap, label: 'Calories', value: stats.calories.value, color: 'text-yellow-600' },
+                    { icon: Timer, label: 'Stress', value: stats.stress.value, unit: 'low', color: 'text-purple-600' },
+                  ].map((metric, idx) => (
+                    <div key={idx} className="bg-gray-50 rounded-xl p-3 hover:bg-gray-100/50 transition-all border border-gray-200">
+                      <div className="flex items-center gap-2 mb-1">
+                        <metric.icon className={`w-4 h-4 ${metric.color}`} />
+                        <span className="text-gray-700 text-xs font-medium">{metric.label}</span>
+                      </div>
+                      <div className="flex items-baseline gap-1">
+                        <span className="text-2xl font-bold text-gray-900">{metric.value}</span>
+                        {metric.unit && <span className="text-gray-600 text-xs">{metric.unit}</span>}
+                      </div>
                     </div>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-2xl font-bold text-gray-900">{stats.oxygen.value}</span>
-                      <span className="text-gray-600 text-xs">%</span>
-                    </div>
-                  </div>
-
-                  <div className="bg-gray-50 rounded-xl p-3 hover:bg-gray-100/50 transition-all border border-gray-200">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Moon className="w-4 h-4 text-indigo-600" />
-                      <span className="text-gray-700 text-xs font-medium">Sleep</span>
-                    </div>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-2xl font-bold text-gray-900">{stats.sleep.value}</span>
-                      <span className="text-gray-600 text-xs">hrs</span>
-                    </div>
-                  </div>
-
-                  <div className="bg-gray-50 rounded-xl p-3 hover:bg-gray-100/50 transition-all border border-gray-200">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Circle className="w-4 h-4 text-blue-600" />
-                      <span className="text-gray-700 text-xs font-medium">Steps</span>
-                    </div>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-2xl font-bold text-gray-900">{stats.steps.value.toLocaleString()}</span>
-                    </div>
-                  </div>
-
-                  <div className="bg-gray-50 rounded-xl p-3 hover:bg-gray-100/50 transition-all border border-gray-200">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Thermometer className="w-4 h-4 text-orange-600" />
-                      <span className="text-gray-700 text-xs font-medium">Temp</span>
-                    </div>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-2xl font-bold text-gray-900">{stats.temp.value}°</span>
-                    </div>
-                  </div>
-
-                  <div className="bg-gray-50 rounded-xl p-3 hover:bg-gray-100/50 transition-all border border-gray-200">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Zap className="w-4 h-4 text-yellow-600" />
-                      <span className="text-gray-700 text-xs font-medium">Calories</span>
-                    </div>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-2xl font-bold text-gray-900">{stats.calories.value}</span>
-                    </div>
-                  </div>
-
-                  <div className="bg-gray-50 rounded-xl p-3 hover:bg-gray-100/50 transition-all border border-gray-200">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Timer className="w-4 h-4 text-purple-600" />
-                      <span className="text-gray-700 text-xs font-medium">Stress</span>
-                    </div>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-2xl font-bold text-gray-900">{stats.stress.value}</span>
-                      <span className="text-gray-600 text-xs">low</span>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* How It Works Section */}
-        <section className="py-16 bg-white">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold mb-4">How It Works</h2>
-              <p className="text-xl text-gray-600">Three simple steps to better health monitoring</p>
-            </div>
+        {/* Why the iHealth-Sync Dashboard Matters Section */}
+        <DashboardSection />
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
-              {steps.map((step, index) => (
-                <div
-                  key={step.id}
-                  className="p-6 rounded-2xl bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 border border-[#20B2AA]/20"
-                >
-                  <div className="flex items-start space-x-4">
-                    <div className={`${step.color} p-4 rounded-xl text-white`}>
-                      <step.icon size={24} />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between">
-                        <h3 className="text-xl font-semibold">{step.title}</h3>
-                        <span className="text-gray-400">
-                          <Clock size={16} className="inline mr-1" />
-                          {step.stats}
-                        </span>
-                      </div>
-                      <p className="mt-2 text-gray-600">{step.description}</p>
-                      <div className="mt-4 space-y-3">
-                        {step.substeps.map((substep, idx) => (
-                          <div key={idx} className="flex items-center space-x-2 text-gray-700">
-                            <CheckCircle size={16} className="text-green-500" />
-                            <span>{substep}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Why Choose Us Section */}
+        {/* Why Choose iHealth-Sync Section */}
         <section className="py-16 bg-gray-50">
           <div className="max-w-7xl mx-auto px-6">
             <h2 className="text-4xl font-bold text-center mb-4">Why Choose iHealth-Sync?</h2>
@@ -310,41 +431,21 @@ const HomePage = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
               {/* Feature Cards Column */}
               <div className="space-y-6">
-                <div className="bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 p-6 rounded-xl border border-[#20B2AA]/20 hover:shadow-lg transition-all">
-                  <div className="flex items-start gap-4">
-                    <div className="bg-gradient-to-r from-[#008B8B] to-[#20B2AA] p-3 rounded-lg text-white">
-                      <Heart className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-semibold mb-2">Real-Time Monitoring</h3>
-                      <p className="text-gray-600">Advanced AI algorithms monitor your vital signs 24/7, providing instant alerts and personalized insights.</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 p-6 rounded-xl border border-[#20B2AA]/20 hover:shadow-lg transition-all">
-                  <div className="flex items-start gap-4">
-                    <div className="bg-gradient-to-r from-[#008B8B] to-[#20B2AA] p-3 rounded-lg text-white">
-                      <Bell className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-semibold mb-2">Smart Alerts</h3>
-                      <p className="text-gray-600">Receive immediate notifications for critical health changes and emergency situations.</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 p-6 rounded-xl border border-[#20B2AA]/20 hover:shadow-lg transition-all">
-                  <div className="flex items-start gap-4">
-                    <div className="bg-gradient-to-r from-[#008B8B] to-[#20B2AA] p-3 rounded-lg text-white">
-                      <UserPlus className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-semibold mb-2">Family Connection</h3>
-                      <p className="text-gray-600">Share health updates with family members and healthcare providers in real-time.</p>
-                    </div>
-                  </div>
-                </div>
+                <FeatureCard
+                  icon={Heart}
+                  title="Real-Time Monitoring"
+                  description="Advanced AI algorithms monitor your vital signs 24/7, providing instant alerts and personalized insights."
+                />
+                <FeatureCard
+                  icon={Bell}
+                  title="Smart Alerts"
+                  description="Receive immediate notifications for critical health changes and emergency situations."
+                />
+                <FeatureCard
+                  icon={UserPlus}
+                  title="Family Connection"
+                  description="Share health updates with family members and healthcare providers in real-time."
+                />
               </div>
 
               {/* Image Column */}
@@ -359,114 +460,13 @@ const HomePage = () => {
           </div>
         </section>
 
-        {/* Dashboard Overview Section */}
-        <section className="py-16 bg-white">
-          <div className="max-w-7xl mx-auto px-6">
-            <h2 className="text-4xl font-bold text-center mb-4">Why the iHealth-Sync Dashboard Matters</h2>
-            <p className="text-xl text-gray-600 text-center mb-12">Your personalized health dashboard is the heart of your monitoring experience.</p>
+        {/* Testimonials Section */}
+        <TestimonialsSection />
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-              {/* Left Column - Explanation */}
-              <div>
-                <h3 className="text-2xl font-semibold text-[#008B8B] mb-4">Centralized Health Monitoring</h3>
-                <p className="text-gray-600 mb-4">
-                  The iHealth-Sync Dashboard gives you a single, real-time view of all your vital health data. From heart rate and blood pressure to sleep patterns and activity levels, everything is tracked in one intuitive interface. It's designed to simplify your health journey and give you control over your well-being at a glance.
-                </p>
-                <p className="text-gray-600 mb-8">
-                  With personalized recommendations, historical trend analysis, and seamless integration of AI-powered insights, you can stay ahead of your health and wellness goals.
-                </p>
-                <h4 className="text-xl font-semibold text-[#008B8B] mb-4">Why is it important?</h4>
-                <ul className="list-disc list-inside text-gray-600 mb-6">
-                  <li>Monitor your health in real time</li>
-                  <li>Track patterns and trends over time</li>
-                  <li>Get tailored insights and health recommendations</li>
-                  <li>Stay connected with your healthcare providers and family</li>
-                </ul>
-              </div>
+        {/* Insights and Resources Section */}
+        <InsightsAndResourcesSection />
 
-              {/* Right Column - Example Image */}
-              <div className="relative bg-gradient-to-br from-[#008B8B]/10 to-[#20B2AA]/20 p-8 rounded-2xl border border-[#20B2AA]/20">
-                <div className="relative z-10">
-                  <h3 className="text-xl font-semibold text-white mb-4">Example: iHealth-Sync Dashboard</h3>
-                  <p className="text-white mb-6">Here's an example of how the dashboard organizes and displays your key health metrics, making it easy to visualize your well-being and stay on top of your health journey.</p>
-                  <div className="h-48 bg-[#008B8B]/30 rounded-lg overflow-hidden">
-                    {/* Placeholder for dashboard example */}
-                    <div className="flex items-center justify-center h-full bg-[#008B8B]/20">
-                      <span className="text-white">Dashboard Example Placeholder</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Call to Action */}
-            <div className="text-center mt-12">
-              <button className="bg-[#FF7F50] text-white py-3 px-6 rounded-full hover:bg-[#FF6347] transition duration-300">
-                Explore Your Dashboard
-              </button>
-            </div>
-          </div>
-        </section>
-
-        {/* Blog Section */}
-        <section className="py-16 bg-white">
-          <div className="max-w-7xl mx-auto px-6">
-            <h2 className="text-4xl font-bold text-center mb-4">Insights and Resources</h2>
-            <p className="text-xl text-gray-600 text-center mb-12">Stay informed about your health journey</p>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {/* AI and Health Monitoring Card */}
-              <div className="group hover:scale-105 transition-all duration-300">
-                <div className="bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 rounded-2xl overflow-hidden border border-[#20B2AA]/20">
-                  <div className="h-48 bg-[#008B8B]/20 rounded-t-2xl flex items-center justify-center">
-                    <Settings className="w-16 h-16 text-[#008B8B]" />
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-semibold mb-3">AI and Health Monitoring</h3>
-                    <p className="text-gray-600 mb-4">Discover how artificial intelligence is revolutionizing personal healthcare monitoring.</p>
-                    <Link to="/ai-health-monitoring" className="text-[#008B8B] font-medium flex items-center gap-2 group-hover:gap-3 transition-all">
-                      Learn More <ArrowRight className="w-4 h-4" />
-                    </Link>
-                  </div>
-                </div>
-              </div>
-
-              {/* Managing Medications Card */}
-              <div className="group hover:scale-105 transition-all duration-300">
-                <div className="bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 rounded-2xl overflow-hidden border border-[#20B2AA]/20">
-                  <div className="h-48 bg-[#008B8B]/20 rounded-t-2xl flex items-center justify-center">
-                    <Bell className="w-16 h-16 text-[#008B8B]" />
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-semibold mb-3">Managing Medications</h3>
-                    <p className="text-gray-600 mb-4">Expert tips and digital tools for maintaining your medication schedule effectively.</p>
-                    <Link to="/managing-medications" className="text-[#008B8B] font-medium flex items-center gap-2 group-hover:gap-3 transition-all">
-                      Learn More <ArrowRight className="w-4 h-4" />
-                    </Link>
-                  </div>
-                </div>
-              </div>
-
-              {/* Understanding Vitals Card */}
-              <div className="group hover:scale-105 transition-all duration-300">
-                <div className="bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 rounded-2xl overflow-hidden border border-[#20B2AA]/20">
-                  <div className="h-48 bg-[#008B8B]/20 rounded-t-2xl flex items-center justify-center">
-                    <Heart className="w-16 h-16 text-[#008B8B]" />
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-semibold mb-3">Understanding Vitals</h3>
-                    <p className="text-gray-600 mb-4">Comprehensive guide to interpreting your vital signs and health metrics.</p>
-                    <Link to="/understanding-vitals" className="text-[#008B8B] font-medium flex items-center gap-2 group-hover:gap-3 transition-all">
-                      Learn More <ArrowRight className="w-4 h-4" />
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Call-to-Action Section */}
+        {/* Your Journey Starts Here Section */}
         <section className="py-20 bg-gradient-to-br from-[#008B8B] to-[#20B2AA]">
           <div className="max-w-7xl mx-auto px-6">
             <div className="rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 p-12">
@@ -480,48 +480,6 @@ const HomePage = () => {
                   <button className="bg-white/10 text-white px-8 py-3 rounded-xl hover:bg-white/20 transition-all inline-flex items-center justify-center gap-2">
                     Contact Sales <PhoneCall className="w-5 h-5" />
                   </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Accessibility Section */}
-        <section className="py-16 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-6">
-            <h2 className="text-4xl font-bold text-center mb-4">Designed for Everyone</h2>
-            <p className="text-xl text-gray-600 text-center mb-12">Making health monitoring accessible to all</p>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="flex gap-6 items-start p-6 bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 rounded-xl border border-[#20B2AA]/20">
-                <div className="bg-gradient-to-r from-[#008B8B] to-[#20B2AA] p-3 rounded-lg text-white">
-                  <Settings className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold mb-2">Accessibility Features</h3>
-                  <p className="text-gray-600">Intuitive interface designed for users of all abilities, with screen reader support and customizable displays.</p>
-                </div>
-              </div>
-
-              <div className="flex gap-6 items-start p-6 bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 rounded-xl border border-[#20B2AA]/20">
-                <div className="bg-gradient-to-r from-[#008B8B] to-[#20B2AA] p-3 rounded-lg text-white">
-                  <Globe className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold mb-2">Multilingual Support</h3>
-                  <p className="text-gray-600">Available in multiple languages with region-specific health guidelines and recommendations.</p>
-                </div>
-              </div>
-
-              <div className="flex gap-6 items-start p-6 bg-gradient-to-br from-[#20B2AA]/10 to-[#008B8B]/20 rounded-xl border border-[#20B2AA]/20">
-                <div className="bg-gradient-to-r from-[#008B8B] to-[#20B2AA] p-3 rounded-lg text-white">
-                  <Smartphone className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold mb-2">Mobile Optimized</h3>
-                  <p className="text-gray-600">
-                    Seamless experience across all devices with real-time synchronization and offline capability.
-                  </p>
                 </div>
               </div>
             </div>

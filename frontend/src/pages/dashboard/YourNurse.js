@@ -1,197 +1,339 @@
 import React, { useState, useEffect } from 'react';
-import { Phone, Video, Calendar, CheckCircle, AlertCircle, BarChart } from 'lucide-react';
-import { Line } from 'react-chartjs-2';  // For Line chart component
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';  // For chart.js setup
+import { 
+  Phone, Video, Calendar, CheckCircle, AlertCircle, BarChart2,
+  Clock, FileText, MessageSquare, Bell, Heart, Activity,
+  AlertTriangle, User, ChevronRight, Camera, Pill, Upload
+} from 'lucide-react';
+import { Line } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import DashboardHeader from '../../components/DashboardHeader';
 
-// Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const YourNurse = () => {
-  const [messageInput, setMessageInput] = useState('');
-  const [tasks, setTasks] = useState([
-    { task: 'Take your morning medication', completed: false },
-    { task: 'Check blood pressure', completed: false },
-    { task: 'Update glucose levels', completed: false },
-  ]);
-  const [healthMetrics, setHealthMetrics] = useState({
-    bloodPressure: [120, 80],
-    heartRate: 78,
-    glucoseLevels: 98,
-  });
-  
-  // Sample chart data (for blood pressure over time)
-  const chartData = {
-    labels: ['8 AM', '12 PM', '4 PM', '8 PM'],
+  const [activeTab, setActiveTab] = useState('overview');
+  const [isRecording, setIsRecording] = useState(false);
+  const [showUploadModal, setShowUploadModal] = useState(false);
+
+  // Mock data
+  const nurseInfo = {
+    name: "Clara Thompson",
+    title: "Senior Care Specialist RN",
+    specialization: ["Elderly Care", "Chronic Disease Management"],
+    experience: "15+ years",
+    availability: {
+      today: "2:00 PM - 6:00 PM",
+      nextAvailable: "Tomorrow 9:00 AM"
+    },
+    rating: 4.9,
+    reviews: 156
+  };
+
+  const healthMetrics = {
+    bloodPressure: {
+      current: [120, 80],
+      trend: "stable",
+      lastUpdated: "1 hour ago"
+    },
+    heartRate: {
+      current: 78,
+      trend: "improving",
+      lastUpdated: "30 minutes ago"
+    },
+    glucoseLevels: {
+      current: 98,
+      trend: "stable",
+      lastUpdated: "2 hours ago"
+    },
+    oxygen: {
+      current: 98,
+      trend: "stable",
+      lastUpdated: "1 hour ago"
+    }
+  };
+
+  const carePlan = {
+    dailyTasks: [
+      { id: 1, time: "8:00 AM", task: "Take morning medication", type: "medication", status: "completed" },
+      { id: 2, time: "9:00 AM", task: "Check blood pressure", type: "monitoring", status: "pending" },
+      { id: 3, time: "12:00 PM", task: "Update glucose levels", type: "monitoring", status: "pending" },
+      { id: 4, time: "2:00 PM", task: "Video consultation with Nurse Clara", type: "appointment", status: "upcoming" }
+    ],
+    medications: [
+      { name: "Lisinopril", dosage: "10mg", frequency: "Once daily", time: "8:00 AM", refill: "15 days left" },
+      { name: "Metformin", dosage: "500mg", frequency: "Twice daily", time: "8:00 AM, 8:00 PM", refill: "20 days left" }
+    ]
+  };
+
+  // Chart data
+  const vitalsChartData = {
+    labels: ['8 AM', '10 AM', '12 PM', '2 PM', '4 PM', '6 PM'],
     datasets: [
       {
-        label: 'Blood Pressure',
-        data: [120, 125, 118, 122],
-        fill: false,
-        borderColor: '#FF7F50',
-        tension: 0.1,
+        label: 'Blood Pressure (Systolic)',
+        data: [120, 122, 118, 121, 120, 119],
+        borderColor: '#008B8B',
+        tension: 0.4,
       },
+      {
+        label: 'Heart Rate',
+        data: [78, 80, 76, 79, 77, 78],
+        borderColor: '#FF7F50',
+        tension: 0.4,
+      }
     ],
   };
 
-  // Push notification permissions and notifications
-  useEffect(() => {
-    requestNotificationPermission();
-    const interval = setInterval(() => {
-      triggerReminderNotification();
-    }, 60000);  // Notify every minute (for demonstration)
-    
-    return () => clearInterval(interval);
-  }, []);
-
-  // Request permission for notifications
-  const requestNotificationPermission = () => {
-    if (Notification.permission !== 'granted') {
-      Notification.requestPermission().then(permission => {
-        if (permission === 'granted') {
-          console.log("Notification permission granted.");
-        }
-      });
-    }
-  };
-
-  // Show browser notification
-  const showNotification = (title, body) => {
-    if (Notification.permission === 'granted') {
-      new Notification(title, {
-        body: body,
-        icon: '/path/to/icon.png',
-      });
-    }
-  };
-
-  // Trigger task reminder notification
-  const triggerReminderNotification = () => {
-    showNotification("Medication Reminder", "It's time to take your morning medication!");
-  };
-
-  // Mark task as completed
-  const handleTaskCompletion = (index) => {
-    const updatedTasks = [...tasks];
-    updatedTasks[index].completed = true;
-    setTasks(updatedTasks);
-  };
-
-  // Handle sending a message
-  const handleSendMessage = () => {
-    if (messageInput.trim()) {
-      // Handle sending logic here
-      console.log("Message sent:", messageInput);
-      setMessageInput('');
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="max-w-6xl mx-auto px-6 bg-white rounded-lg shadow-lg">
-        {/* Nurse Profile Section */}
-        <div className="flex items-center mb-8">
-          <div className="w-24 h-24 rounded-full bg-gray-300 mr-6">
-            {/* Nurse Avatar Placeholder */}
+    <div className="min-h-screen bg-gray-50">
+      <DashboardHeader />
+      
+      <main className="max-w-7xl mx-auto px-6 py-8 pt-28">
+        {/* Top Section: Nurse Profile & Quick Actions */}
+        <div className="grid grid-cols-3 gap-6 mb-6">
+          {/* Nurse Profile */}
+          <div className="col-span-2 bg-white rounded-lg shadow-lg p-6">
+            <div className="flex items-start gap-6">
+              <div className="w-24 h-24 rounded-full bg-[#008B8B] bg-opacity-10 flex items-center justify-center">
+                <User className="w-12 h-12 text-[#008B8B]" />
+              </div>
+              <div className="flex-1">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-900">{nurseInfo.name}</h2>
+                    <p className="text-[#008B8B] font-medium">{nurseInfo.title}</p>
+                    <div className="flex gap-2 mt-1">
+                      {nurseInfo.specialization.map((spec, index) => (
+                        <span key={index} className="text-sm bg-gray-100 px-2 py-1 rounded-full">
+                          {spec}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="flex items-center gap-1">
+                      <span className="text-lg font-bold text-gray-900">{nurseInfo.rating}</span>
+                      <span className="text-yellow-400">★</span>
+                    </div>
+                    <p className="text-sm text-gray-500">{nurseInfo.reviews} reviews</p>
+                  </div>
+                </div>
+                <div className="mt-4 flex gap-4">
+                  <button className="flex items-center gap-2 px-4 py-2 bg-[#008B8B] text-white rounded-lg hover:bg-opacity-90">
+                    <Video className="w-5 h-5" />
+                    Start Video Call
+                  </button>
+                  <button className="flex items-center gap-2 px-4 py-2 border border-[#008B8B] text-[#008B8B] rounded-lg hover:bg-[#008B8B] hover:text-white">
+                    <Calendar className="w-5 h-5" />
+                    Schedule Appointment
+                  </button>
+                  <button className="flex items-center gap-2 px-4 py-2 border border-[#FF7F50] text-[#FF7F50] rounded-lg hover:bg-[#FF7F50] hover:text-white">
+                    <AlertTriangle className="w-5 h-5" />
+                    Emergency Contact
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
-          <div>
-            <h2 className="text-2xl font-semibold">Nurse Clara</h2>
-            <p className="text-sm text-gray-600">Specialization: Elderly Care</p>
-            <p className="text-sm text-gray-600">Next available: 2:00 PM</p>
-            <p className="text-sm text-gray-600">Working Hours: 9 AM - 6 PM</p>
+
+          {/* Availability Card */}
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <Clock className="w-6 h-6 text-[#008B8B]" />
+              <h3 className="text-lg font-semibold text-gray-900">Availability</h3>
+            </div>
+            <div className="space-y-4">
+              <div>
+                <p className="text-sm text-gray-500">Today's Hours</p>
+                <p className="font-medium text-gray-900">{nurseInfo.availability.today}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Next Available</p>
+                <p className="font-medium text-gray-900">{nurseInfo.availability.nextAvailable}</p>
+              </div>
+              <button className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
+                <Calendar className="w-5 h-5" />
+                View Full Schedule
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Communication with Nurse */}
-        <div className="mb-8">
-          <h3 className="font-semibold text-lg mb-4">Recent Messages</h3>
-          <div className="border-b pb-4">
-            <div className="flex justify-between">
-              <p className="font-medium">Nurse Clara: How are you feeling today?</p>
-              <span className="text-sm text-gray-500">12:30 PM</span>
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-3 gap-6">
+          {/* Left Column: Health Metrics & Charts */}
+          <div className="col-span-2 space-y-6">
+            {/* Vitals Overview */}
+            <div className="bg-white rounded-lg shadow-lg p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-lg font-semibold text-gray-900">Current Vitals</h3>
+                <button className="text-sm text-[#008B8B] hover:text-[#FF7F50]">View History</button>
+              </div>
+              <div className="grid grid-cols-4 gap-4">
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Heart className="w-5 h-5 text-[#FF7F50]" />
+                    <span className="text-sm text-gray-500">Blood Pressure</span>
+                  </div>
+                  <p className="text-xl font-bold text-gray-900">{healthMetrics.bloodPressure.current[0]}/{healthMetrics.bloodPressure.current[1]}</p>
+                  <p className="text-sm text-gray-500">mmHg</p>
+                </div>
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Activity className="w-5 h-5 text-[#008B8B]" />
+                    <span className="text-sm text-gray-500">Heart Rate</span>
+                  </div>
+                  <p className="text-xl font-bold text-gray-900">{healthMetrics.heartRate.current}</p>
+                  <p className="text-sm text-gray-500">bpm</p>
+                </div>
+                {/* Add other vitals similarly */}
+              </div>
             </div>
-            <p className="text-sm text-gray-700">I'm doing okay, but I need to check my blood pressure.</p>
+
+            {/* Vitals Chart */}
+            <div className="bg-white rounded-lg shadow-lg p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-lg font-semibold text-gray-900">Vitals Trends</h3>
+                <div className="flex gap-4">
+                  <select className="text-sm border border-gray-300 rounded-lg px-3 py-2">
+                    <option>Last 24 Hours</option>
+                    <option>Last Week</option>
+                    <option>Last Month</option>
+                  </select>
+                </div>
+              </div>
+              <div className="h-80">
+                <Line data={vitalsChartData} options={{ 
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  scales: {
+                    y: {
+                      beginAtZero: false
+                    }
+                  }
+                }} />
+              </div>
+            </div>
           </div>
-          <textarea
-            value={messageInput}
-            onChange={(e) => setMessageInput(e.target.value)}
-            className="w-full p-4 border border-gray-300 rounded-lg mb-4"
-            placeholder="Type your message..."
-          ></textarea>
-          <button
-            onClick={handleSendMessage}
-            className="bg-[#FF7F50] text-white py-2 px-6 rounded-lg hover:bg-[#FF6347]"
-          >
-            Send Message
-          </button>
-        </div>
 
-        {/* Health Monitoring Section */}
-        <div className="mb-8">
-          <h3 className="font-semibold text-lg mb-4">Health Monitoring</h3>
-          <div className="flex gap-8">
-            <div className="flex flex-col items-center">
-              <p className="text-xl font-semibold">Blood Pressure</p>
-              <p className="text-lg text-gray-600">{healthMetrics.bloodPressure[0]}/{healthMetrics.bloodPressure[1]} mmHg</p>
+          {/* Right Column: Care Plan & Tasks */}
+          <div className="space-y-6">
+            {/* Today's Tasks */}
+            <div className="bg-white rounded-lg shadow-lg p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Today's Care Plan</h3>
+              <div className="space-y-4">
+                {carePlan.dailyTasks.map(task => (
+                  <div key={task.id} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                    <div className={`p-2 rounded-full ${
+                      task.status === 'completed' ? 'bg-green-100' :
+                      task.status === 'pending' ? 'bg-yellow-100' :
+                      'bg-blue-100'
+                    }`}>
+                      {task.type === 'medication' ? <Pill className="w-5 h-5 text-[#008B8B]" /> :
+                       task.type === 'monitoring' ? <Activity className="w-5 h-5 text-[#FF7F50]" /> :
+                       <Calendar className="w-5 h-5 text-blue-500" />}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex justify-between">
+                        <p className="font-medium text-gray-900">{task.task}</p>
+                        <span className="text-sm text-gray-500">{task.time}</span>
+                      </div>
+                      <p className="text-sm text-gray-500">{task.status}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="flex flex-col items-center">
-              <p className="text-xl font-semibold">Heart Rate</p>
-              <p className="text-lg text-gray-600">{healthMetrics.heartRate} bpm</p>
+
+            {/* Medications */}
+            <div className="bg-white rounded-lg shadow-lg p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Current Medications</h3>
+              <div className="space-y-4">
+                {carePlan.medications.map((med, index) => (
+                  <div key={index} className="p-3 bg-gray-50 rounded-lg">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <p className="font-medium text-gray-900">{med.name}</p>
+                        <p className="text-sm text-gray-500">{med.dosage} - {med.frequency}</p>
+                      </div>
+                      <span className="text-sm text-[#FF7F50]">{med.refill}</span>
+                    </div>
+                    <div className="mt-2 pt-2 border-t border-gray-200">
+                      <p className="text-sm text-gray-500">Next dose: {med.time}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="flex flex-col items-center">
-              <p className="text-xl font-semibold">Glucose Levels</p>
-              <p className="text-lg text-gray-600">{healthMetrics.glucoseLevels} mg/dL</p>
+
+            {/* Communication */}
+            <div className="bg-white rounded-lg shadow-lg p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Communication</h3>
+              <div className="space-y-3">
+                <button className="w-full flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100">
+                  <div className="flex items-center gap-3">
+                    <MessageSquare className="w-5 h-5 text-[#008B8B]" />
+                    <span className="font-medium text-gray-700">Send Message</span>
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-gray-400" />
+                </button>
+                <button className="w-full flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100">
+                  <div className="flex items-center gap-3">
+                    <Camera className="w-5 h-5 text-[#008B8B]" />
+                    <span className="font-medium text-gray-700">Share Photo/Video</span>
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-gray-400" />
+                </button>
+                <button className="w-full flex items-center justify-between p-3 bg-red-50 rounded-lg hover:bg-red-100">
+                  <div className="flex items-center gap-3">
+                    <AlertTriangle className="w-5 h-5 text-red-500" />
+                    <span className="font-medium text-red-700">Emergency Alert</span>
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-red-400" />
+                </button>
+              </div>
+            </div>
+
+            {/* Upload Section */}
+            <div className="bg-white rounded-lg shadow-lg p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Health Documents</h3>
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                <p className="text-sm text-gray-600">
+                  Drop files here or <span className="text-[#008B8B] hover:text-[#FF7F50] cursor-pointer">browse</span>
+                </p>
+                <p className="text-xs text-gray-500 mt-1">Upload medical reports, prescriptions, or test results</p>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Health Chart - Blood Pressure Over Time */}
-        <div className="mb-8">
-          <h3 className="font-semibold text-lg mb-4">Blood Pressure Over Time</h3>
-          <Line data={chartData} options={{ responsive: true }} />
-        </div>
-
-        {/* Care Plan Section */}
-        <div className="mb-8">
-          <h3 className="font-semibold text-lg mb-4">Care Plan</h3>
-          <ul className="space-y-4">
-            {tasks.map((task, index) => (
-              <li
-                key={index}
-                className="flex items-center"
-                onClick={() => handleTaskCompletion(index)}
+        {/* Emergency Alert Modal - Hidden by default */}
+        <div className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center ${showUploadModal ? 'block' : 'hidden'}`}>
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Upload Documents</h3>
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center mb-4">
+              <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <p className="text-gray-600">Drag and drop files here</p>
+              <p className="text-sm text-gray-500 mt-2">or</p>
+              <button className="mt-4 px-4 py-2 bg-[#008B8B] text-white rounded-lg hover:bg-opacity-90">
+                Browse Files
+              </button>
+            </div>
+            <div className="flex justify-end gap-4">
+              <button 
+                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                onClick={() => setShowUploadModal(false)}
               >
-                {task.completed ? (
-                  <CheckCircle className="w-5 h-5 text-green-500 mr-3" />
-                ) : (
-                  <span className="w-5 h-5 text-gray-500 mr-3">🕒</span>
-                )}
-                <span className={task.completed ? 'line-through' : ''}>{task.task}</span>
-              </li>
-            ))}
-          </ul>
+                Cancel
+              </button>
+              <button className="px-4 py-2 bg-[#008B8B] text-white rounded-lg hover:bg-opacity-90">
+                Upload
+              </button>
+            </div>
+          </div>
         </div>
-
-        {/* Quick Actions Section */}
-        <div className="flex gap-6 justify-center mb-8">
-          <button className="bg-[#FF7F50] text-white py-2 px-6 rounded-lg hover:bg-[#FF6347] flex items-center gap-2">
-            <Phone className="w-5 h-5" />
-            Call Nurse
-          </button>
-          <button className="bg-[#FF7F50] text-white py-2 px-6 rounded-lg hover:bg-[#FF6347] flex items-center gap-2">
-            <Video className="w-5 h-5" />
-            Video Consult
-          </button>
-        </div>
-
-        {/* Emergency Alert */}
-        <div className="bg-red-100 p-4 rounded-lg mb-8">
-          <h4 className="font-semibold text-lg mb-2 text-red-600">Emergency Alert</h4>
-          <p className="text-sm text-gray-700">Press the button below to alert your nurse in case of an emergency.</p>
-          <button className="bg-red-600 text-white py-2 px-6 rounded-lg hover:bg-red-700 mt-4">
-            Emergency Alert
-          </button>
-        </div>
-      </div>
+      </main>
     </div>
   );
 };
