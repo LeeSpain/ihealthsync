@@ -5,7 +5,6 @@ import {
   Heart, 
   ArrowRight,
   Home,
-  HandHeart,
   Shield,
   Users
 } from 'lucide-react';
