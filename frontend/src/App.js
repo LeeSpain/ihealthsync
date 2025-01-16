@@ -45,7 +45,7 @@ import NotFound from './pages/NotFound'; // Fallback for undefined routes
 const App = () => {
   return (
     <Router>
-      <ScrollToTop /> {/* Scroll to top on route change */}
+      <ScrollToTop /> {/* Ensures pages scroll to the top on route change */}
       <div className="flex flex-col min-h-screen">
         {/* Main Content Area */}
         <div className="flex-grow">
